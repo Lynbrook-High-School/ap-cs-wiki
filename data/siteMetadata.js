@@ -6,8 +6,8 @@ const siteMetadata = {
   description: 'Articles covering various AP CS topics',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog', 
+  siteUrl: 'https://thegamingmousse.github.io/ap-cs-wiki',
+  siteRepo: 'https://github.com/TheGamingMousse/ap-cs-wiki', 
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   locale: 'en-US',
