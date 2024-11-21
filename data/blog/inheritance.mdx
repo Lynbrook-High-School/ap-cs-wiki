@@ -179,12 +179,9 @@ What is printed by the code snippet?
 
 5. This code doesn't compile.
 
-<details>
-  <summary>Answer</summary>
-  Option 2 is correct. When we call the constructor for <code>Car</code>, it calls the superclass constructor, which is the constructor for 
-  <code>Vehicle</code>. That method prints out "<code>Vehicle: Engine started</code>". Then, we return back to the constructor for <code>Car</code>
-  and print "<code>Car: Engine started</code>".
-</details>
+Option 2 is correct. When we call the constructor for `Car`, it calls the superclass constructor, which is the constructor for 
+`Vehicle`. That method prints out `Vehicle: Engine started`. Then, we return back to the constructor for `Car`
+and print `Car: Engine started`.
 
 ### Question 2
 
@@ -222,11 +219,8 @@ What is printed by the code snippet?
         Sub
         Super
 
-<details>
-  <summary>Answer</summary>
-  Option 3 is correct. When we call the constructor for <code>Sub</code>, it first implicitly calls the constructor 
-  for <code>Super</code>. Thus, it prints <code>Super</code>, then <code>Sub</code>.
-</details>
+Option 3 is correct. When we call the constructor for `Sub`, it first implicitly calls the constructor 
+for `Super`. Thus, it prints `Super`, then `Sub`.
 
 ### Question 3
 
@@ -263,14 +257,10 @@ Why doesn't this code compile?
 2. The constructor for `Sub` attempts to access a field in `Super`.
 3. `x` was declared as a public variable, whereas it should have been declared as private.
 
-<details>
-  <summary>Answer</summary>
-  
-  <p>Option 1 is correct. If not explicitly called, Java will call the superclass constructor.
-  However, because it calls the no-args constructor and no such constructor exists, it results
-  in an error.</p>
+Option 1 is correct. If not explicitly called, Java will call the superclass constructor.
+However, because it calls the no-args constructor and no such constructor exists, it results
+in an error.
 
-  <p>Option 2 is wrong because <code>x</code> was declared as a public field, so it was inherited.</p>
+Option 2 is wrong because <code>x</code> was declared as a public field, so it was inherited.
 
-  <p>Option 3 is wrong because fields can be public, but generally should be left as private.</p>
-</details>
+Option 3 is wrong because fields can be public, but generally should be left as private.

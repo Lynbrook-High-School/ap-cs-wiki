@@ -1,0 +1,87 @@
+---
+title: Random Numbers
+date: '2024-11-20'
+tags: ['Misc.']
+draft: false
+summary: How to randomly generate numbers in Java.
+---
+
+Say we want to generate some real number in the range $[0, 1)$. How can we do this?
+
+Java provides us a convenient solution to this problem. In the library `java.lang.Math`, there is a 
+`random()` method that does exactly what we want it to do. Here's an example of how it works.
+
+```java 
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(Math.random()); // prints 0.830048089988098
+    }
+}
+```
+
+Here is some basic information about the method, taken from 
+[Oracle's documentation](https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#random--).
+
+`public static double random()` returns a double value greater than or 
+equal to `0.0` and less than `1.0`, with values being chosen pseudorandomly 
+and with roughly uniform distribution.
+
+> [!NOTE]
+> If you try running the code snippet above multiple times, you will see that 
+> it prints a different value every time. This is because the pseudorandom number 
+> generator used for `Math.random()` is seeded based off of the current time.
+
+## Example 1
+
+Here's an easy example for when you would need to use the `Math.random()` function.
+In the 2024 AP CS exam, the following problem was posed.
+
+> Write the simulateOneDay method, which simulates numBirds birds or possibly a bear at the 
+> feeder for one day. The method determines the amount of food taken from the feeder on this day and 
+> updates the currentFood instance variable. The simulation accounts for normal conditions, which 
+> occur 95% of the time, and abnormal conditions, which occur 5% of the time. 
+
+We can ignore the context of the problem. Here, they require us to do one thing `95%` of the time,
+and another thing `5%` of the time. How can we do this?
+
+The most straightforward way is to first generate a random number $x$, and check if $x < 0.95$. 
+If so, we do the thing we want to do `95%` of the time. Otherwise, we do the thing we want to do
+`5%` of the time.
+
+## Example 2
+
+This example is taken from the same FRQ as the other one. 
+
+> Under normal conditions, the simulation assumes that on any given day, only birds visit the feeder and 
+> that each bird at the feeder consumes the same amount of food. This standard amount consumed is 
+> between 10 and 50 grams of food, inclusive, in 1-gram increments. That is, on any given day, each bird 
+> might eat 10, 11, . . . , 49, or 50 grams of food. The amount of food eaten by each bird on a given day is 
+> randomly generated and each integer from 10 to 50, inclusive, has an equal chance of being chosen. 
+
+Flavortext aside, what they want us to do is generate some number in the range $[10, 50]$. 
+How can we do this?
+
+First, let's generate a random number with `Math.random()`.
+
+```java
+double randNum = Math.random();
+```
+
+Now, we want to first generate some number in the range $[0, 40]$, and then add $10$ to our 
+answer. To accomplish the first task, we multiply our answer by the width of the range. 
+Afterwards, we add the lower bound of the range.
+
+```java
+double randNum = Math.random() * 41 + 10;
+```
+
+Note that here, we don't multiply the random number by $40$, but $41$.
+
+Now, to use it as an integer, we cast our random number into an integer. Why is that?
+Remember how `Math.random()` returns a value in the range $[0, 1)$. That means that it can 
+never return 1, meaning that our random number could never equal $40$.
+
+```java
+double randNum = Math.random() * 41 + 10;
+System.out.println((int) randNum); // prints 15
+```
