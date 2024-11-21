@@ -75,11 +75,11 @@ Afterwards, we add the lower bound of the range.
 double randNum = Math.random() * 41 + 10;
 ```
 
-Note that here, we don't multiply the random number by $40$, but $41$.
-
-Now, to use it as an integer, we cast our random number into an integer. Why is that?
+Note that here, we don't multiply the random number by $40$, but $41$. Why is that?
 Remember how `Math.random()` returns a value in the range $[0, 1)$. That means that it can 
 never return 1, meaning that our random number could never equal $40$.
+
+Now, to use it as an integer, we cast our random number into an integer. 
 
 ```java
 double randNum = Math.random() * 41 + 10;
