@@ -6,8 +6,8 @@ const siteMetadata = {
   description: 'Articles covering various AP CS topics',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://thegamingmousse.github.io/ap-cs-wiki',
-  siteRepo: 'https://github.com/TheGamingMousse/ap-cs-wiki', 
+  siteUrl: 'https://Lynbrook-High-School.github.io/ap-cs-wiki',
+  siteRepo: 'https://github.com/Lynbrook-High-School/ap-cs-wiki', 
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   locale: 'en-US',
