@@ -1,0 +1,204 @@
+---
+title: Java Scanner Class
+date: '2024-12-3'
+tags: ['Misc']
+draft: true
+summary: How to read input in Java.
+---
+
+Printing in Java is simple; we use the `System.out.print()` method. But how do we read input?
+
+One way we can do it is using `java.util.Scanner`, which is a class we can use for reading all sorts of input.
+
+To start, we initialize our `Scanner`.
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+    }
+}
+```
+
+Some things to note:
+- We need to import `java.util.Scanner`
+- When initializing our `Scanner` object, we need to pass in a parameter
+
+The parameter we pass into the constructor is the **input stream** we are using. An input stream is the source of the data we are reading in. Typically, we use the following streams:
+- `System.in` is for the terminal
+- `"file_name"` for reading from a text file
+
+In the context of AP CS, we typically use `System.in`.
+
+## Common Methods
+
+ Let's consider the following
+code.
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String val = sc.next();
+        System.out.println(val);
+    }
+}
+```
+
+```
+Input:
+AP CS
+```
+
+```
+Output:
+AP
+```
+
+To get the next string in our input, we call the `next()` method. To get the entire
+next line, we use the `nextLine()` method.
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String val = sc.nextLine();
+        System.out.println(val);
+    }
+}
+```
+
+```
+Input:
+AP CS
+```
+
+```
+Output:
+AP CS
+```
+
+> [!NOTE]
+> In Java, Strings are separated by whitespace (spaces or newlines). Thus, 
+> in a String `"A B C"`, `next()` would return `"A"`. However, it's worth noting 
+> that `nextLine()` does not care about spaces; it just prints all the content on 
+> the current line (which includes spaces).
+
+If we want to read in a number, then we can use the following methods:
+- nextInt()
+- nextDouble()
+- nextLong()
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int val = sc.nextInt();
+        System.out.println(val);
+    }
+}
+```
+
+```
+Input:
+1234
+```
+
+```
+Output:
+1234
+```
+
+There are more, but those are the ones typically used. Scanner can read in most 
+primitive types.
+
+## More Nuanced Examples
+
+Say we want to read a pair of items: one `int`, and one `String`, separated by spaces.
+How can we do that with the `Scanner` class?
+
+We can use the aforementioned `nextInt()` and `next()` methods. Because our text
+is split by spaces, this works out to be the most natural solution.
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int val_1 = sc.nextInt();
+        String val_2 = sc.next();
+        System.out.println(val_1 + " " + val_2);
+    }
+}
+```
+
+```
+Input:
+5 Bob
+```
+
+```
+Output:
+5 Bob
+```
+
+Let's consider the following code. What is printed by it?
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String first = sc.next();
+        String second = sc.nextLine();
+        System.out.println(first);
+        System.out.println(second);
+    }
+}
+```
+
+```
+Input:
+ap cs
+```
+
+Somewhat surprisingly, this prints the following:
+
+```
+Output:
+ap 
+ cs
+```
+
+Why is this? A look at another example might make it a bit more clear.
+
+```
+Input:
+ap  cs
+```
+
+```
+Output:
+ap
+  cs
+```
+
+In the second example, our input stream for this line starts off as this:
+
+```ap  cs```
+
+Once we call `next()`, we only have the following text on our line:
+
+```  cs```
+
+Then, `nextLine()` prints out the rest of the content on the line.
