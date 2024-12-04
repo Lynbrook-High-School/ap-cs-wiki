@@ -1,44 +1,37 @@
 'use client'
 
-/**
- * This component was taken from usaco.guide, although
- * I am still in the process of tweaking it to work with this site.
- * (functionality works, but CSS is still a bit weird right now.)
- */
-
-import React from 'react';
+import React from 'react'
 
 export interface SpoilerProps {
-  title: string;
+  title: string
   /**
    * Whether or not the spoiler should start expanded.
    * Defaults to false.
    */
-  startExpanded?: boolean;
-  children?: React.ReactNode;
+  startExpanded?: boolean
+  children?: React.ReactNode
 }
 
-const Spoiler = ({
-  children,
-  title,
-  startExpanded = false,
-}: SpoilerProps): JSX.Element => {
-  const [show, setShow] = React.useState(startExpanded);
+const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.Element => {
+  const [show, setShow] = React.useState(startExpanded)
 
   return (
-    <div
-      className={`bg-gray-50 border-gray-100 dark:border-transparent dark:bg-gray-800 dark:bg-opacity-50 rounded-md mb-4`}
-    >
+    <div className="mb-4 rounded-md border-gray-100 bg-gray-50 dark:border-transparent dark:bg-gray-800 dark:bg-opacity-50">
       <p
-        className="p-4 flex items-start"
-        onClick={e => {
-          setShow(!show);
+        className="flex items-start p-4"
+        role="button"
+        tabIndex={0}
+        onClick={() => setShow(!show)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setShow(!show)
+          }
         }}
         style={{ marginBottom: 0 }}
       >
-        {show && (
+        {show ? (
           <svg
-            className="h-6 w-6 text-gray-500 mr-4"
+            className="mr-4 h-6 w-6 text-gray-500"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -48,10 +41,9 @@ const Spoiler = ({
               clipRule="evenodd"
             />
           </svg>
-        )}
-        {!show && (
+        ) : (
           <svg
-            className="h-6 w-6 text-gray-500 mr-4"
+            className="mr-4 h-6 w-6 text-gray-500"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -65,13 +57,9 @@ const Spoiler = ({
         <span className="flex-1">{title}</span>
       </p>
 
-      {show && (
-        <div className="rounded-none" style={{marginTop: 0, marginBottom:0}}>
-          {children}
-        </div>
-      )}
+      {show && <div className="px-4 py-2">{children}</div>}
     </div>
-  );
-};
+  )
+}
 
-export default Spoiler;
+export default Spoiler
