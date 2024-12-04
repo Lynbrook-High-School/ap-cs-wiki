@@ -17,10 +17,8 @@ const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.
 
   return (
     <div className="mb-4 rounded-md border-gray-100 bg-gray-50 dark:border-transparent dark:bg-gray-800 dark:bg-opacity-50">
-      <p
+      <button
         className="flex items-start p-4"
-        role="button"
-        tabIndex={0}
         onClick={() => setShow(!show)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -28,13 +26,10 @@ const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.
           }
         }}
         style={{ marginBottom: 0 }}
+        type="button"
       >
         {show ? (
-          <svg
-            className="mr-4 h-6 w-6 text-gray-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg className="mr-4 h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -42,11 +37,7 @@ const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.
             />
           </svg>
         ) : (
-          <svg
-            className="mr-4 h-6 w-6 text-gray-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg className="mr-4 h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -55,7 +46,7 @@ const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.
           </svg>
         )}
         <span className="flex-1">{title}</span>
-      </p>
+      </button>
 
       {show && <div className="px-4 py-2">{children}</div>}
     </div>
