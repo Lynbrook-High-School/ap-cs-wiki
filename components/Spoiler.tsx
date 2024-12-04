@@ -48,7 +48,7 @@ const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.
         <span className="flex-1">{title}</span>
       </button>
 
-      {show && <div className="px-4 py-2">{children}</div>}
+      {show && <div className="no-y-margin px-6 py-2">{children}</div>}
     </div>
   )
 }
