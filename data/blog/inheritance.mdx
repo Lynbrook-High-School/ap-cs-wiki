@@ -170,6 +170,7 @@ What is printed by the code snippet?
 2. 
         Vehicle: Car
         Car: Engine started
+
 3. 
         Car: Engine started
 
@@ -179,9 +180,13 @@ What is printed by the code snippet?
 
 5. This code doesn't compile.
 
+<Spoiler title="Explanation">
+
 Option 2 is correct. When we call the constructor for `Car`, it calls the superclass constructor, which is the constructor for 
 `Vehicle`. That method prints out `Vehicle: Engine started`. Then, we return back to the constructor for `Car`
 and print `Car: Engine started`.
+
+</Spoiler>
 
 ### Question 2
 
@@ -219,8 +224,12 @@ What is printed by the code snippet?
         Sub
         Super
 
+<Spoiler title="Explanation">
+
 Option 3 is correct. When we call the constructor for `Sub`, it first implicitly calls the constructor 
 for `Super`. Thus, it prints `Super`, then `Sub`.
+
+</Spoiler>
 
 ### Question 3
 
@@ -257,6 +266,8 @@ Why doesn't this code compile?
 2. The constructor for `Sub` attempts to access a field in `Super`.
 3. `x` was declared as a public variable, whereas it should have been declared as private.
 
+<Spoiler title="Explanation">
+
 Option 1 is correct. If not explicitly called, Java will call the superclass constructor.
 However, because it calls the no-args constructor and no such constructor exists, it results
 in an error.
@@ -264,3 +275,5 @@ in an error.
 Option 2 is wrong because <code>x</code> was declared as a public field, so it was inherited.
 
 Option 3 is wrong because fields can be public, but generally should be left as private.
+
+</Spoiler>
