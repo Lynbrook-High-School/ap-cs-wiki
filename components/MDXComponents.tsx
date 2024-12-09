@@ -5,7 +5,9 @@ import type { MDXComponents } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
+
 import Spoiler from './Spoiler'
+import Quiz from './Quiz'
 
 export const components: MDXComponents = {
   Image,
@@ -15,4 +17,5 @@ export const components: MDXComponents = {
   table: TableWrapper,
   BlogNewsletterForm,
   Spoiler,
+  Quiz,
 }
