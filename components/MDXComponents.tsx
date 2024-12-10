@@ -5,7 +5,6 @@ import type { MDXComponents } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
-
 import Spoiler from './Spoiler'
 import Quiz from './Quiz'
 
