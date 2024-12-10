@@ -19,5 +19,5 @@ export const components: MDXComponents = {
   Quiz,
   QuizQuestion,
   QuizAnswer: QuizMCAnswer,
-  QuizExplanation: QuizAnswerExplanation
+  QuizExplanation: QuizAnswerExplanation,
 }
