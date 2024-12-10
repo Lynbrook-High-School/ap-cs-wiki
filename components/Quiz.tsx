@@ -151,7 +151,8 @@ const ActualQuiz = (props) => {
     if (child?.type?.displayName === 'QuizQuestion') {
       return child
     } else {
-      throw new Error('Children of the Quiz component can only be Quiz.Question')
+      // throw new Error('Children of the Quiz component can only be Quiz.Question')
+      return child
     }
   })
   // <ArrowLeftIcon className="-ml-0.5 mr-2 h-4 w-4" /> Previous
@@ -232,3 +233,5 @@ Quiz.Answer = QuizMCAnswer
 Quiz.Explanation = QuizAnswerExplanation
 
 export default Quiz
+
+export { QuizQuestion, QuizMCAnswer, QuizAnswerExplanation }

@@ -6,7 +6,7 @@ import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
 import Spoiler from './Spoiler'
-import Quiz from './Quiz'
+import Quiz, { QuizQuestion, QuizMCAnswer, QuizAnswerExplanation } from './Quiz'
 
 export const components: MDXComponents = {
   Image,
@@ -17,4 +17,7 @@ export const components: MDXComponents = {
   BlogNewsletterForm,
   Spoiler,
   Quiz,
+  QuizQuestion,
+  QuizAnswer: QuizMCAnswer,
+  QuizExplanation: QuizAnswerExplanation
 }

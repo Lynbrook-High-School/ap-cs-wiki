@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Quiz from './Quiz'
 
 export interface SpoilerProps {
   title: string

@@ -1,0 +1,189 @@
+---
+title: Objects and Classes in Java
+date: '2024-12-9'
+tags: ['Ch 3 Objects']
+draft: false
+summary: Implementing classes and using objects.
+---
+
+Java is an object-oriented language. That is, in Java, everything is associated with classes and objects.
+
+But first, what is an object? An object is a collection of data and the behavior associated with them. All **classes** are objects.
+
+We refer to the data that an object has as its **fields/attributes**, and its 
+behaviors as its **methods**.
+
+Note that **all objects are references**. What does this mean? Consider
+the following code snippet.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        int[] a = new int[]{1, 2, 3};
+        int[] b = a;
+        a[0] = 5;
+        System.out.println(a[0]); // 5
+        System.out.println(b[0]); // 5
+    }
+}
+```
+
+All `int[]` variables are references to an array object. Thus, when we assign
+`b` to `a`, we make `b` a reference to same array that `a` refers to.
+
+Note that this type of behavior doesn't happen in certain cases.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        String a = new String("abc");
+        String b = a;
+        a = a.toUpperCase();
+        System.out.println(a); // prints "ABC"
+        System.out.println(b); // prints "abc"
+    }
+}
+```
+
+This behavior occurs because **Strings are immutable**. When we do the assignment
+`a = a.toUpperCase()`, we are making `a` refer to a new String object.
+
+Now, on to classes. To create a class, we first declare it.
+
+```
+class Dog {
+    private String name;
+    private int age;
+}
+```
+
+> [!NOTE]
+> In Java, we typically declare all **attributes** as being `private`.
+> The philosophy behind this will be explained later.
+
+To initialize our fields `name` and `age`, we write a **constructor**. 
+
+```
+class Dog {
+    private String name;
+    private int age;
+    
+    public Dog(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+The declaration of a constructor method is in the following format:
+
+`public ClassName(parameters)`
+
+Note how we assign variables with the following format:
+
+``` 
+this.var = var;
+```
+
+The reason we do it like this is to avoid **variable shadowing**. If we didn't
+add the `this` qualifier, Java would assign the given variable to itself. 
+The `this` keyword tells Java that we are referring to our current object.
+
+Another solution is to give our constructor parameters different values from the 
+values in the class. Some people write it like this:
+
+```
+class Dog {
+    private String name;
+    private int age;
+    
+    public Dog(String _name, int _age) {
+        name = _name;
+        age = _age;
+    }
+}
+```
+
+However, it's generally better practice to do it in the first style.
+
+> [!WARNING]
+> We **do not** declare our method to be `void`. Why? Because if we declared it void, then 
+> Java wouldn't be able to distinguish our constructor from a regular method.
+
+We can also write multiple constructors for our class.
+
+```
+class Dog {
+    private String name;
+    private int age;
+
+    public Dog(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Dog(int age) {
+        this("fido", age);
+    }
+}
+```
+
+In this example, we call our first constructor with the second one. Note how
+we use `this("fido", age)` and not `Dog("fido", age)`. As mentioned earlier, 
+the `this` keyword tells Java that we are referring to our current object.
+Because we are calling a constructor, we use `this` instead of `Dog` when calling
+our constructor. (Also because Java would interpret `Dog` as a normal method)
+
+Writing methods in Java is considerably less nuanced. For the sake of demonstration,
+here's a snippet of code demonstrating how methods work.
+
+```java
+class Dog {
+    private String name;
+    private int age;
+
+    public Dog(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Dog(int age) {
+        this("fido", age);
+    }
+
+    public void bark() {
+        System.out.println("woof");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int newAge) {
+        if (newAge > age) {
+            age = newAge;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog("Doge", 12);
+        System.out.println(dog.getName() + " " + dog.getAge()); // "Doge 12"
+        dog.bark(); // prints "woof"
+    }
+}
+```
+
+Note the inclusion of the `getName`, `getAge`, and `setAge` methods. These are 
+known as **getter** and **setter** methods.
+
+The philosophy behind having `private` fields and these methods is that we don't
+want other classes changing our current class's attributes. In the example above,
+we have some code to make sure the given input is valid. We don't want other 
+classes modifying our `Dog` class's fields directly, which is why we make it 
+private.
