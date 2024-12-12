@@ -10,15 +10,15 @@ export default async function Page() {
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => {
-    if (a === "misc" && b === "misc") return 0
-    if (a === "misc") return 1
-    if (b === "misc") return -1
-  
-    const aNum = parseInt(a.split("-")[1], 10)
-    const bNum = parseInt(b.split("-")[1], 10)
-  
+    if (a === 'misc' && b === 'misc') return 0
+    if (a === 'misc') return 1
+    if (b === 'misc') return -1
+
+    const aNum = parseInt(a.split('-')[1], 10)
+    const bNum = parseInt(b.split('-')[1], 10)
+
     return aNum - bNum
-  })  
+  })
 
   return (
     <>
