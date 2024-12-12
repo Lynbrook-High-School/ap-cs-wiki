@@ -149,9 +149,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 <Link
                   href={`/${basePath}`}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                  aria-label="Back to the blog"
+                  aria-label="Back to the wiki"
                 >
-                  &larr; Back to the blog
+                  &larr; Back to the wiki
                 </Link>
               </div>
             </footer>

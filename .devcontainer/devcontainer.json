@@ -9,7 +9,7 @@
   "postAttachCommand": "yarn dev",
   "customizations": {
     "codespaces": {
-      "openFiles": ["data/blog/code-sample.mdx"]
+      "openFiles": ["data/articles/code-sample.mdx"]
     },
     "vscode": {
       "settings": {
