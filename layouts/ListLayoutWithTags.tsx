@@ -71,7 +71,17 @@ export default function ListLayoutWithTags({
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
-  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const sortedTags = tagKeys.sort((a, b) => {
+    if (a === "misc" && b === "misc") return 0
+    if (a === "misc") return 1
+    if (b === "misc") return -1
+  
+    const aNum = parseInt(a.split("-")[1], 10)
+    const bNum = parseInt(b.split("-")[1], 10)
+  
+    return aNum - bNum
+  })
+  
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
