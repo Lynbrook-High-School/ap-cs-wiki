@@ -193,3 +193,50 @@ want other classes changing our current class's attributes. In the example above
 we have some code to make sure the given input is valid. We don't want other
 classes modifying our `Dog` class's fields directly, which is why we make it
 private.
+
+<Quiz>
+  <QuizQuestion>
+    What does this code print?
+    ```java
+    class Foo {
+      private String str;
+
+      Foo(String str) {
+          this.str = str;
+      }
+
+      String getStr() {
+          return str;
+      }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Foo a = new Foo("Bessie");
+            int b = 6;
+            alter(a, b);
+            System.out.println(a.getStr() + " " + b); 
+        }
+
+        public static void alter(Foo a, int b) {
+            b--;
+            b = 6;
+            a = new Foo("Farmer John");
+        }
+    }
+    ```
+    
+    <QuizMCAnswer number={0}>
+      Bessie 5
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      Farmer John 6
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      Farmer John 5
+    </QuizMCAnswer>
+    <QuizMCAnswer number={3} correct>
+      Bessie 6
+    </QuizMCAnswer>
+  </QuizQuestion>
+</Quiz>

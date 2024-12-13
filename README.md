@@ -52,3 +52,6 @@ So far, there are only three extra components that are used when writing an arti
 For now, just refer to the `Objects/Classes` and `Inheritance` articles for 
 how to use them. If the syntax is confusing, just show ChatGPT the example and
 ask it to write it in that format.
+
+Here's [a short program](https://ide.usaco.guide/OE1CCX1YUEuOaREwId0) that might help 
+with writing a Quiz.
