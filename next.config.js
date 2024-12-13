@@ -56,7 +56,8 @@ const securityHeaders = [
 
 const output = process.env.EXPORT ? 'export' : undefined
 const unoptimized = process.env.UNOPTIMIZED ? true : undefined
-const isProd = process.env.NODE_ENV === 'production'
+
+const isProd = process.env.NODE_ENV === 'production';
 
 /**
  * @type {import('next/dist/next-server/server/config').NextConfig}
@@ -65,8 +66,8 @@ module.exports = () => {
   const plugins = [withContentlayer, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
     output,
-    assetPrefix: isProd ? '/ap-cs-wiki' : '',
     basePath: isProd ? '/ap-cs-wiki' : '',
+    assetPrefix: isProd ? '/ap-cs-wiki/' : '',
     reactStrictMode: true,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {
