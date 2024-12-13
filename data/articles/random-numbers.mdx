@@ -85,3 +85,34 @@ Now, to use it as an integer, we cast our random number into an integer.
 double randNum = Math.random() * 41 + 10;
 System.out.println((int) randNum); // prints 15
 ```
+
+## Quiz
+
+<Quiz>
+  <QuizQuestion>
+    What expression generates a random integer in the range $[5, 20]$?
+    <QuizMCAnswer number={0}>
+      `(int) (5 + Math.random() * 15)`
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      `5 + Math.random() * 15`
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2} correct>
+      `(int) (5 + Math.random() * 16)`
+    </QuizMCAnswer>
+  </QuizQuestion>
+
+  <QuizQuestion>
+    What is the probability that `Math.random() < 0.95`?
+
+    <QuizMCAnswer number={0}>
+      94%
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1} correct>
+      95%
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      5%
+    </QuizMCAnswer>
+  </QuizQuestion>
+</Quiz>

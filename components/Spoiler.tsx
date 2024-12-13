@@ -1,19 +1,23 @@
+/**
+ * React Spoiler component. Source:
+ * https://github.com/cpinitiative/usaco-guide/
+ *
+ * Some minor styling edits were also made.
+ */
+
 'use client'
 
 import React from 'react'
-import Quiz from './Quiz'
 
-export interface SpoilerProps {
+const Spoiler = ({
+  children,
+  title,
+  startExpanded = false,
+}: {
   title: string
-  /**
-   * Whether or not the spoiler should start expanded.
-   * Defaults to false.
-   */
   startExpanded?: boolean
   children?: React.ReactNode
-}
-
-const Spoiler = ({ children, title, startExpanded = false }: SpoilerProps): JSX.Element => {
+}): JSX.Element => {
   const [show, setShow] = React.useState(startExpanded)
 
   return (

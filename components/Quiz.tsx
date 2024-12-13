@@ -1,7 +1,18 @@
+/**
+ * React Quiz component. Source:
+ * https://github.com/cpinitiative/usaco-guide/
+ *
+ * With some edits made because this site template doesn't support
+ * subcomponents in a nice way.
+ *
+ * TODO: Change how the quiz handles wrong answers being submitted so it doesn't
+ *       show the answer immediately after clicking it.
+ */
+
 'use client'
 
 import classNames from 'classnames'
-import { atom, useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
+import { Provider, atom, useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
 import React, { useEffect } from 'react'
 
 const finalAnswersAtom = atom<number[]>([])
@@ -19,18 +30,16 @@ const handleSubmittedAnswerAtom = atom(null, (get, set, answerIndex: number) => 
   })
 })
 
-const QuizAnswerExplanation = ({ children }: { children?: React.ReactNode }) => (
-  <div className="no-y-margin text-sm text-gray-700 dark:text-gray-400">{children}</div>
-)
-
 const QuizMCAnswer = ({
   number,
   correct,
   children,
+  text,
 }: {
   number: number
   correct?: boolean
   children?: React.ReactNode
+  text?: string
 }) => {
   const store = useStore()
   const [selectedAnswer, setSelectedAnswer] = useAtom(selectedAnswerAtom, { store })
@@ -38,7 +47,7 @@ const QuizMCAnswer = ({
   const correctAnswers = useAtomValue(correctAnswersAtom, { store })
 
   const isSelected = selectedAnswer === number
-  const showVerdict = submitted && (isSelected || correctAnswers.includes(selectedAnswer ?? -1))
+  const showVerdict = submitted
   const isCorrect = submitted && correctAnswers.includes(selectedAnswer ?? -1)
   const Element = isCorrect ? 'div' : 'button'
 
@@ -47,12 +56,7 @@ const QuizMCAnswer = ({
       className="flex w-full items-start rounded-2xl bg-gray-100 px-4 py-3 text-left focus:outline-none dark:bg-gray-900"
       onClick={() => {
         if (!showVerdict) {
-          if (selectedAnswer !== number) {
-            setSelectedAnswer(number)
-            setSubmittedValue(false)
-          } else if (!submitted) {
-            setSelectedAnswer(null)
-          }
+          setSelectedAnswer(number)
         }
       }}
     >
@@ -73,7 +77,11 @@ const QuizMCAnswer = ({
       >
         {number + 1}
       </span>
-      <div className="no-y-margin ml-3 flex-1">{children}</div>
+      <div className="no-y-margin ml-3 flex-1">
+        <div className="no-y-margin">{children}</div>
+
+        {submitted && <div className="text-sm text-gray-700 dark:text-gray-400">{text}</div>}
+      </div>
     </Element>
   )
 }
@@ -95,7 +103,7 @@ const QuizQuestion = ({ children }: { children: React.ReactNode }) => {
   return <div className="space-y-2">{children}</div>
 }
 
-const Quiz = ({ children }: { children: React.ReactNode }) => {
+const ActualQuiz = ({ children }: { children: React.ReactNode }) => {
   const store = useStore()
   const [currentQuestion, setCurrentQuestion] = useAtom(currentQuestionAtom, {
     store,
@@ -182,5 +190,13 @@ const Quiz = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
+const Quiz = ({ children }: { children: React.ReactNode }): JSX.Element => {
+  return (
+    <Provider>
+      <ActualQuiz>{children}</ActualQuiz>
+    </Provider>
+  )
+}
+
 export default Quiz
-export { QuizQuestion, QuizMCAnswer, QuizAnswerExplanation }
+export { QuizQuestion, QuizMCAnswer }

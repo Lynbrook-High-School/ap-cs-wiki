@@ -139,141 +139,128 @@ we want to inherit all the fields from the superclass.
 
 ## Quiz
 
-### Question 1
-
-```java
-class Vehicle {
-    Vehicle(String type) {
-        System.out.println("Vehicle: " + type);
+<Quiz>
+  <QuizQuestion>
+    What is printed by the code snippet?
+    ```java
+    class Vehicle {
+        Vehicle(String type) {
+            System.out.println("Vehicle: " + type);
+        }
     }
-}
 
-class Car extends Vehicle {
-    Car() {
-        super("Car");
-        System.out.println("Car: Engine started");
+    class Car extends Vehicle {
+        Car() {
+            super("Car");
+            System.out.println("Car: Engine started");
+        }
     }
-}
 
-public class Main {
-    public static void main(String[] args) {
-        Vehicle myVehicle = new Car();
+    public class Main {
+        public static void main(String[] args) {
+            Vehicle myVehicle = new Car();
+        }
     }
-}
-```
+    ```
 
-What is printed by the code snippet?
+    <QuizMCAnswer number={0}>
+      Vehicle: Car
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1} correct>
+      Vehicle: Car
 
-1. 
-        Vehicle: Car
+      Car: Engine started
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      Car: Engine started
+    </QuizMCAnswer>
+    <QuizMCAnswer number={3}>
+      Car: Engine started
 
-2. 
-        Vehicle: Car
-        Car: Engine started
+      Vehicle: Car
+    </QuizMCAnswer>
+    <QuizMCAnswer number={4}>
+      This code doesn't compile.
+    </QuizMCAnswer>
+  </QuizQuestion>
 
-3. 
-        Car: Engine started
-
-4. 
-        Car: Engine started        
-        Vehicle: Car
-
-5. This code doesn't compile.
-
-<Spoiler title="Explanation">
-
-Option 2 is correct. When we call the constructor for `Car`, it calls the superclass constructor, which is the constructor for 
-`Vehicle`. That method prints out `Vehicle: Engine started`. Then, we return back to the constructor for `Car`
-and print `Car: Engine started`.
-
-</Spoiler>
-
-### Question 2
-
-```java
-class Super {
-    Super() {
-        System.out.println("Super");
+  <QuizQuestion>
+    What is printed by the code snippet?
+    ```java
+    class Super {
+        Super() {
+            System.out.println("Super");
+        }
     }
-}
 
-class Sub {
-    Sub() {
-        System.out.println("Sub");
+    class Sub {
+        Sub() {
+            System.out.println("Sub");
+        }
     }
-}
 
-public class Main {
-    public static void main(String[] args) {
-        Sub sub = new Sub();
+    public class Main {
+        public static void main(String[] args) {
+            Sub sub = new Sub();
+        }
     }
-}
-```
+    ```
 
-What is printed by the code snippet?
+    <QuizMCAnswer number={0}>
+      Super
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      Sub
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2} correct>
+      Super
 
-1. 
-        Super
-2. 
-        Sub
-3. 
-        Super
-        Sub
+      Sub
+    </QuizMCAnswer>
+    <QuizMCAnswer number={3}>
+      Sub
+      
+      Super
+    </QuizMCAnswer>
+  </QuizQuestion>
 
-4. 
-        Sub
-        Super
+  <QuizQuestion>
+    Why doesn't this code compile?
+    ```java
+    class Super {
+        public int x;
 
-<Spoiler title="Explanation">
-
-Option 3 is correct. When we call the constructor for `Sub`, it first implicitly calls the constructor 
-for `Super`. Thus, it prints `Super`, then `Sub`.
-
-</Spoiler>
-
-### Question 3
-
-```java
-class Super {
-    public int x;
-
-    Super(int x) {
-        this.x = x;
-        System.out.println("Super " + x);
+        Super(int x) {
+            this.x = x;
+            System.out.println("Super " + x);
+        }
     }
-}
 
-class Sub extends Super {
-    private int y;
+    class Sub extends Super {
+        private int y;
+
+        Sub(int x, int y) {
+            this.x = x;
+            this.y = y;
+            System.out.println("Sub " + y);
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Sub sub = new Sub(1, 3);
+        }
+    }
+    ```
     
-    Sub(int x, int y) {
-        this.x = x;
-        this.y = y;
-        System.out.println("Sub " + y);
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Sub sub = new Sub(1, 3);
-    }
-}
-```
-
-Why doesn't this code compile?
-
-1. The no-args constructor is called for `Super`, but no such constructor exists.
-2. The constructor for `Sub` attempts to access a field in `Super`.
-3. `x` was declared as a public variable, whereas it should have been declared as private.
-
-<Spoiler title="Explanation">
-
-Option 1 is correct. If not explicitly called, Java will call the superclass constructor.
-However, because it calls the no-args constructor and no such constructor exists, it results
-in an error.
-
-Option 2 is wrong because <code>x</code> was declared as a public field, so it was inherited.
-
-Option 3 is wrong because fields can be public, but generally should be left as private.
-
-</Spoiler>
+    <QuizMCAnswer number={0} correct>
+      The no-args constructor is called for Super, but no such constructor exists.
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      The constructor for Sub attempts to access a field in Super.
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      x was declared as a public variable, whereas it should have been declared as private.
+    </QuizMCAnswer>
+  </QuizQuestion>
+</Quiz>
