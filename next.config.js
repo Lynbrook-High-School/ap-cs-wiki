@@ -57,7 +57,7 @@ const securityHeaders = [
 const output = process.env.EXPORT ? 'export' : undefined
 const unoptimized = process.env.UNOPTIMIZED ? true : undefined
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
 
 /**
  * @type {import('next/dist/next-server/server/config').NextConfig}
