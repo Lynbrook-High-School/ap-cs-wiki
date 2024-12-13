@@ -5,7 +5,9 @@ const Video = ({ src }: { src: string }) => {
     throw new Error('File path cannot be empty.')
   }
 
-  const path = src.startsWith('/') ? `/ap-cs-wiki/static/videos${src}` : `/ap-cs-wiki/static/videos/${src}`
+  const path = src.startsWith('/')
+    ? `/ap-cs-wiki/static/videos${src}`
+    : `/ap-cs-wiki/static/videos/${src}`
 
   return (
     <video width="960" height="720" controls>
