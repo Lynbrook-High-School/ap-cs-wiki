@@ -37,6 +37,7 @@ jobs:
       - run: yarn build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_NODE_ENV: production
           EXPORT: 1
           UNOPTIMIZED: 1
           BASE_PATH: ${{ steps.configurepages.outputs.base_path }}
