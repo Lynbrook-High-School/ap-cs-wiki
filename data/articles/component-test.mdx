@@ -32,24 +32,46 @@ In gravida tempus enim, non dapibus magna fermentum eget. Nam non orci ut massa 
 
 <Quiz>
   <QuizQuestion>
-    What is most useful when solving ad hoc problems?
-    <QuizAnswer>
-      Being able to quickly recall complex algorithms and data structures.
-      <QuizExplanation>
-        Incorrect. Ad hoc solutions may use specific algorithms and data structures, but a majority of the solution relies on observations and understanding the problem.
-      </QuizExplanation>
-    </QuizAnswer>
-    <QuizAnswer correct>
-      Exploring lots of cases and making observations.
-      <QuizExplanation>
-        Correct. Trying small cases allows you to better understand the problem and helps you make more observations. Certain observations may be a crucial part of the solution.
-      </QuizExplanation>
-    </QuizAnswer>
-    <QuizAnswer>
-      Relying on previous knowledge on well-studied topics.
-      <QuizExplanation>
-        Incorrect. Ad hoc problems have solutions that are not well-studied and do not fall into any standard categories.
-      </QuizExplanation>
-    </QuizAnswer>
+    <div>
+      Time complexity of this code?
+      ```cpp
+      int main() {
+          cin.tie(0) -> sync_with_stdio(0);
+      }
+      ```
+      <QuizAnswerExplanation>
+        The capital of France is Paris.
+      </QuizAnswerExplanation>
+    </div>
+    <QuizMCAnswer number={0} correct>
+      Paris
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      London
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      Berlin
+    </QuizMCAnswer>
+    <QuizMCAnswer number={3}>
+      Madrid
+    </QuizMCAnswer>
+  </QuizQuestion>
+  
+  <QuizQuestion>
+    <div>
+      What is 2 + 2?
+      <QuizAnswerExplanation>
+        The answer is 4.
+      </QuizAnswerExplanation>
+    </div>
+    <QuizMCAnswer number={0}>
+      3
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1} correct>
+      4
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2}>
+      5
+    </QuizMCAnswer>
   </QuizQuestion>
 </Quiz>

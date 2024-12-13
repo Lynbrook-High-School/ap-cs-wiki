@@ -27,7 +27,7 @@ module.exports = {
       colors: {
         primary: colors.sky,
         gray: colors.gray,
-        'dark-surface': '#121212',
+        'dark-surface': '#030712',
       },
       zIndex: {
         60: '60',
