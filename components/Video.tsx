@@ -1,3 +1,10 @@
+/**
+ * A small React video component to keep all the videos
+ * consistent.
+ * 
+ * TODO: Figure out how to fix the root path in Github Pages.
+ */
+
 'use client'
 
 const Video = ({ src }: { src: string }) => {
