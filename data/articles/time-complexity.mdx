@@ -1,0 +1,112 @@
+---
+title: Time Complexity
+date: '2024-12-13'
+tags: ['Ch 18 Time Complexity']
+draft: true
+summary: Analyzing the number of operations a program performs.
+---
+
+In AP CS and programming in general, it's often helpful to know the
+order of magnitude of the number of operations that our program does.
+The commonly accepted way of notating this is known as **Big O notation**.
+
+What is Big O notation? Big O notation denotes the worst case number of
+operations as a function of the input.
+
+<Spoiler title="Formal Definition">
+
+Consider two functions, $f$ and $g$, where the domain of both functions
+is $\mathbb{R}_{\ge 0}$.
+
+If there exists two constants $n_0$ and $c$ where
+$f(n) \leq c \cdot g(n)$ for all $n \geq n_0$, then we say
+$f(n) = \mathcal{O}(g(n))$.
+
+</Spoiler>
+
+By convention, we ignore all constant terms in our expression. For example, $\mathcal{O}(\frac{n}{2})$ is equivalent to $\mathcal{O}(n)$. 
+Note that we typically want to choose the most restrictive function when analyzing the complexity.
+
+To make this abstract idea more concrete, let's go through some examples.
+
+```java
+int c = a + b;
+System.out.println(c);
+```
+
+This runs in $\mathcal{O}(1)$. Why? Because the values of $a$ and $b$
+have no relevance in terms of how many operations are done.
+
+Let's consider another example.
+
+```java
+for (int i = 0; i < n; i++) {
+    System.out.println(i);
+}
+```
+
+This runs in $\mathcal{O}(n)$ time because increasing $n$ linearly increases the number of operations we do.
+
+```java
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        System.out.println(i + " " + j);
+    }
+}
+```
+
+This runs in $\mathcal{O}(n^{2})$.
+
+In the context of AP CS, simply counting the largest number of nested
+for loops at any location _typically_ suffices. However, don't use this as a rule. There are many, _many_ examples where this isn't correct.
+
+Consider the following code. $a$ is a sorted array of integers. For every index $i$, we want to find the first index $j$ where $a[j] - a[i] > k$.
+
+```java
+int[] a = new int[n];
+int right = 0;
+for (int i = 0; i < n; i++) {
+    right = Math.max(right, i);
+    while (right < n && a[right] - a[i] <= k) {
+        right++;
+    }
+    System.out.println(right);
+}
+```
+
+Somewhat surprisingly, this code runs in $\mathcal{O}(n)$ time. Why?
+Well, we know that the while loop can do up to $\mathcal{O}(n)$ loops in a single iteration of $i$. 
+But, because `right` can only increase, it can only move up to $\mathcal{O}(n)$ times. Thus, 
+the time complexity of this program is $\mathcal{O}(n)$.
+
+<Quiz>
+  <QuizQuestion>
+    What is the time complexity of this code?
+
+    ```java
+    public boolean is_prime(int x) {
+        int i = 2;
+        while (i * i <= x) {
+            if (x % i == 0) {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    ```
+    
+    <QuizMCAnswer number={0}>
+      $\mathcal{O}(n)$
+    </QuizMCAnswer>
+    <QuizMCAnswer number={1}>
+      $\mathcal{O}(n^{2})$
+    </QuizMCAnswer>
+    <QuizMCAnswer number={2} correct>
+      $\mathcal{O}(\sqrt{n})$
+    </QuizMCAnswer>
+    <QuizMCAnswer number={3}>
+      $\mathcal{O}(\log{n})$
+    </QuizMCAnswer>
+  </QuizQuestion>
+</Quiz>
