@@ -3,7 +3,7 @@
  * consistent.
  *
  * NOTE: Videos don't load on localhost because GitHub's root
- * isn't at /ap-cs-wiki. 
+ * isn't at /ap-cs-wiki.
  */
 
 'use client'
