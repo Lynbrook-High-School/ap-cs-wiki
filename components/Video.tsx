@@ -2,7 +2,8 @@
  * A small React video component to keep all the videos
  * consistent.
  *
- * TODO: Figure out how to fix the root path in Github Pages.
+ * NOTE: Videos don't load on localhost because GitHub's root
+ * isn't at /ap-cs-wiki. 
  */
 
 'use client'

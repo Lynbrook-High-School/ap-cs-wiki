@@ -75,9 +75,9 @@ for (int i = 0; i < n; i++) {
 ```
 
 Somewhat surprisingly, this code runs in $\mathcal{O}(n)$ time. Why?
-Well, we know that the while loop can do up to $\mathcal{O}(n)$ loops in a single iteration of $i$. 
-But, because `right` can only increase, it can only move up to $\mathcal{O}(n)$ times. Thus, 
-the time complexity of this program is $\mathcal{O}(n)$.
+The while loop can do up to $\mathcal{O}(n)$ operations in one for loop 
+iteration. However, because `right` can only increase, the number of operations
+done inside the while loop is bounded at $\mathcal{O}(n)$.
 
 ## Quiz
 
@@ -86,10 +86,10 @@ the time complexity of this program is $\mathcal{O}(n)$.
     What is the time complexity of this code?
 
     ```java
-    public boolean is_prime(int x) {
+    public boolean is_prime(int n) {
         int i = 2;
-        while (i * i <= x) {
-            if (x % i == 0) {
+        while (i * i <= n) {
+            if (n % i == 0) {
                 return false;
             }
             i++;
