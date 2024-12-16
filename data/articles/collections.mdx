@@ -1,0 +1,153 @@
+---
+title: Collections in Java
+date: '2024-12-16'
+tags: ['Ch 19 Collections']
+draft: false
+summary: Exploring the Java collections framework.
+---
+
+The Java collections framework is a set of components that help us represent
+a collection of data. To import the framework, we can use the following code:
+
+```java
+import java.util.*;
+```
+
+Alternatively, our IDE can resolve all of our imports for us.
+
+![Java Collections Framework Diagram](/ap-cs-wiki/static/images/collections/collections-diagram.png)
+
+As seen in the diagram, many of the classes inside the chart are implementations of certain interfaces. For example, `ArrayList` and `LinkedList` are both implementations of the `List` interface, `TreeSet` and `HashSet` are both implementations of `Set`, etc. Understanding how each class/interface is related to each other is important, both for the AP CS class and when programming in general.
+
+Here are some key facts regarding all collections.
+
+- Collections hold references to objects
+  - May contain references to two **equal** objects or two of the **same** objects.
+- Because they are objects, collection variables are a reference to an object
+- The **same** object can be present in multiple objects
+
+Reference [this article](/ap-cs-wiki/articles/object-classes) for information
+regarding objects and how they work in Java.
+
+Let's consider the following examples to make these concepts a bit more concrete.
+
+```java
+ArrayList<Integer> list = new ArrayList<>();
+list.add(new Integer(1));
+list.add(new Integer(1));
+System.out.println(list.get(0).equals(list.get(1))); // true
+System.out.println(list.get(0) == list.get(1)); // false
+```
+
+In the code snippet above, we added two different objects into our `ArrayList`.
+Because we are adding references of objects into our list, comparing the two
+objects with `==` returns false.
+
+```java
+ArrayList<Integer> list = new ArrayList<>();
+Integer x = new Integer(1);
+list.add(x);
+list.add(x);
+System.out.println(list.get(0).equals(list.get(1))); // true
+System.out.println(list.get(0) == list.get(1)); // true
+```
+
+Here, we added two references of the same object into our list. Thus, 
+comparing the two objects with `==` returns true.
+
+> [!TIP]
+> In general, always use the `.equals()` method when comparing two objects.
+
+```java
+ArrayList<Integer> a = new ArrayList<>();
+ArrayList<Integer> b = a;
+
+a.add(1);
+
+System.out.println(a.size()); // 1
+System.out.println(b.size()); // 1
+```
+
+Because our object variables are references to an object, `b = a` essentially
+means that `b` currently points to the same `ArrayList` as `a`.
+
+Understanding how objects work is imperative when writing code using collections.
+It's [easy to get messed up](https://github.com/cpinitiative/usaco-guide/pull/4850)
+by forgetting that all collection classes only contain objects. 
+
+Before we cover the most important classes in the collection framework, let's first
+explore the key interfaces behind the framework: `Collection`, `Iterator`, and
+`Iterable`.
+
+## Collections
+
+The `Collection` interface has a lot of methods that are 
+[listed here](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html).
+Here are the most commmonly used ones:
+- `boolean add(E obj)`
+- `boolean remove(E obj)`
+- `boolean contains(E obj)`
+- `int size()`
+- `boolean isEmpty()`
+- `Iterator<E> iterator()`
+
+Note that `E` is a stand-in for the type we want. These methods provide a set of 
+operations that every collection should support.
+
+## Iterators
+
+Iterators allow us to traverse through 
+a collection. The `Iterator` interface
+has the following methods:
+- `default void forEachRemaining(Consumer<? super E> action)`
+- `boolean hasNext()`
+- `E next()`
+- `default void remove()`
+
+The focal points main idea is that an iterator can move forward in a collection, allowing us to iterate through our collection.
+
+## Iteratable
+
+In Java, the `Collection` interface implements the `Iterable` interface.
+This interface has the following methods:
+- `default void forEach(Consumer<? super T> action)`
+- `Iterator<T> iterator()`
+- `default Spliterator<T> spliterator()`
+
+These names might seem a bit daunting. In essence, all the `Iterable` interface
+does is ensure we can retrieve iterators and iterate using for-each loops in 
+our collections.
+
+For reference, a for-each loop looks like this:
+
+```java
+ArrayList<String> arr = new ArrayList<>();
+for (String i : arr) {
+    // do something
+}
+```
+
+## Iterating Through Collections
+
+We typically use either iterators or for-each loops to iterate through a collection.
+
+```java
+Collection<String> words = new ArrayList<String>();
+```
+
+Using an iterator:
+```java
+Iterator<String> it = words.iterator();
+
+while (it.hasNext()) {
+    String cur = it.next();
+    // process cur
+}
+```
+
+Using a for-each loop:
+```java
+for (String cur : words) {
+    // process cur
+}
+```
