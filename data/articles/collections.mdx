@@ -17,7 +17,10 @@ Alternatively, our IDE can resolve all of our imports for us.
 
 ![Java Collections Framework Diagram](/static/images/collections/collections-diagram.png)
 
-As seen in the diagram, many of the classes inside the chart are implementations of certain interfaces. For example, `ArrayList` and `LinkedList` are both implementations of the `List` interface, `TreeSet` and `HashSet` are both implementations of `Set`, etc. Understanding how each class/interface is related to each other is important, both for the AP CS class and when programming in general.
+As seen in the diagram, many of the classes inside the chart are implementations of certain interfaces. 
+For example, `ArrayList` and `LinkedList` are both implementations of the `List` interface, `TreeSet` and `HashSet` 
+are both implementations of `Set`, etc. Understanding how each class/interface is related to each other is important, 
+both for the AP CS class and when programming in general.
 
 Here are some key facts regarding all collections.
 
@@ -26,7 +29,7 @@ Here are some key facts regarding all collections.
 - Because they are objects, collection variables are a reference to an object
 - The **same** object can be present in multiple objects
 
-Reference [this article](/ap-cs-wiki/articles/object-classes) for information
+Reference [this article](/articles/object-classes) for information
 regarding objects and how they work in Java.
 
 Let's consider the following examples to make these concepts a bit more concrete.
@@ -72,8 +75,8 @@ Because our object variables are references to an object, `b = a` essentially
 means that `b` currently points to the same `ArrayList` as `a`.
 
 Understanding how objects work is imperative when writing code using collections.
-It's [easy to get messed up](https://github.com/cpinitiative/usaco-guide/pull/4850)
-by forgetting that all collection classes only contain objects. 
+Make sure to be careful when writing code involving collections, as it's easy to get 
+[bamboozled](https://github.com/cpinitiative/usaco-guide/pull/4850).
 
 Before we cover the most important classes in the collection framework, let's first
 explore the key interfaces behind the framework: `Collection`, `Iterator`, and
@@ -104,7 +107,7 @@ has the following methods:
 - `E next()`
 - `default void remove()`
 
-The focal points main idea is that an iterator can move forward in a collection, allowing us to iterate through our collection.
+The main idea is that an iterator can move forward in a collection, allowing us to iterate through our collection.
 
 ## Iteratable
 
