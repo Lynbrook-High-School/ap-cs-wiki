@@ -1,0 +1,167 @@
+---
+title: Binary Search Trees
+date: '2024-12-20'
+tags: ['Misc']
+draft: true
+summary: How binary search trees work.
+---
+
+A binary search tree allows us to efficiently maintain a sorted list of numbers. Java's implementation of it is `java.util.TreeSet`.
+
+## Definition and Properties
+
+As indicated in the name, a binary search tree is a form of binary tree.
+
+> [!NOTE]
+> A binary tree is a rooted tree where 
+> each node has at most two children.
+
+Let's consider our binary search tree to have a value written on each one of its nodes. Then, for a tree to be a binary 
+search tree, the following properties must hold:
+
+- All nodes in the left subtree must be less than our current node
+- All nodes in the right subtree must be greater than our current node
+
+Note that this definition does not allow for repeat elements in our BST.
+
+The reason this definition is special is because it allows us to find, insert and remove elements in $\mathcal{O}(\log{n})$ time. 
+
+It's helpful to view the binary search tree as a
+decision tree. At every node, we decide if we want
+to move to a greater or smaller element in the tree.
+
+## Insertion
+
+To insert a new number, we use the following recursive procedure. 
+- If our current node is `null`, insert our new number here
+- If our new value is less than our current node's value, move down the left subtree
+- If our new value is greater than our current node's value, move down the right subtree
+
+```
+FUNCTION InsertNode(curNode, value):
+    IF curNode IS NULL:
+        CREATE a new node with value
+        RETURN the new node
+
+    IF value < curNode.value:
+        curNode.left ← InsertNode(curNode.left, value)
+    ELSE IF value > curNode.value:
+        curNode.right ← InsertNode(curNode.right, value)
+
+    RETURN curNode
+```
+
+## Searching
+
+We use a similar recursive procedure to search for elements. Note that the algorithm below is designed
+to return a reference to the node with the element we 
+are trying to find.
+
+- If our current node is `null`, return `null` 
+- If our value is less than our current node's value, recurse down the left subtree
+- If our value is greater than our current node's value, recurse down the right subtree
+- If our value is equal to the our current node's value, return our current node
+
+```
+FUNCTION SearchNode(curNode, value):
+    IF curNode IS NULL:
+        RETURN NULL
+
+    IF value = curNode.value:
+        RETURN curNode
+
+    IF value < curNode.value:
+        RETURN SearchNode(curNode.left, value)
+    ELSE:
+        RETURN SearchNode(curNode.right, value)
+```
+
+### Case 1: Deleted Node Has No Children  
+Simply delete the given node, as it has no children and its removal doesn't affect the tree's structure.
+
+### Case 2: Deleted Node Has 1 Child  
+Replace the given node's value with its child's value, then remove the child node entirely.
+
+### Case 3: Deleted Node Has 2 Children  
+1. Identify the **inorder successor**, which is the smallest value in the right subtree.
+   - Start at the given node and move to the right child.  
+   - Traverse left until reaching a node whose left child is `null`.  
+
+2. Swap the value of the inorder successor with the given node.  
+
+3. Delete the inorder successor node, which will now either have no children or one child. 
+   This reduces down to case 1 or case 2.
+
+Why does this work? Let's consider the following facts:
+- The inorder successor's value is the smallest value in our tree that is still 
+  bigger than the value on our current node
+- The inorder successor is still bigger than any node in our given node's left
+  subtree, but is smaller than any other node in the right subtree
+
+Based on these facts, we can see that the BST property is still satisfied. 
+We also don't need to worry about any nodes outside of our given node's subtree,
+as deleting the given node does not affect the minimum or maximum value inside 
+the subtree.
+
+```
+FUNCTION DeleteNode(curNode, value):
+    IF curNode IS NULL:
+        RETURN curNode
+
+    IF value < curNode.value:
+        curNode.left ← DeleteNode(curNode.left, value)
+    ELSE IF value > curNode.value:
+        curNode.right ← DeleteNode(curNode.right, value)
+    ELSE:
+        IF curNode.left IS NULL AND curNode.right IS NULL:
+            RETURN NULL
+        ELSE IF curNode.left IS NULL:
+            RETURN curNode.right
+        ELSE IF curNode.right IS NULL:
+            RETURN curNode.left
+        ELSE:
+            minNode ← FindMin(curNode.right)
+            curNode.value ← minNode.value
+            curNode.right ← DeleteNode(curNode.right, minNode.value)
+
+    RETURN curNode
+
+FUNCTION FindMin(curNode):
+    WHILE curNode.left IS NOT NULL:
+        curNode ← curNode.left
+    RETURN curNode
+```
+
+## Miscellaneous Information
+
+Here's a table for the speed of each operation.
+
+| Operation              | Best Case Time Complexity | Worst Case Time Complexity |
+|------------------------|---------------------------|----------------------------|
+| Search                | $ \mathcal{O}(\log n) $   | $ \mathcal{O}(n) $         |
+| Insertion             | $ \mathcal{O}(\log n) $   | $ \mathcal{O}(n) $         |
+| Deletion              | $ \mathcal{O}(\log n) $   | $ \mathcal{O}(n) $         |
+| Find Minimum          | $ \mathcal{O}(\log n) $   | $ \mathcal{O}(n) $         |
+| Find Maximum          | $ \mathcal{O}(\log n) $   | $ \mathcal{O}(n) $         |
+
+Wait. Where did $\mathcal{O}(n)$ come in? Well, the best case scenario is if 
+the tree is completely **balanced**. That is, its form is of that of a perfect 
+binary tree or something similar, which has a depth of $\mathcal{O}(\log{n})$.
+However, our BST can actually degenerate into a line if we insert our elements
+in a certain order. Try to figure out when that's the case!
+
+<Spoiler title="Answer">
+
+If we insert our elements in ascending order, the tree will flatten into a 
+line of nodes.
+
+</Spoiler>
+
+There are many ways to solve the problem of balancing. These variations are all 
+called **balanced binary search trees**. Some examples include but are not limited to:
+the AVL tree, the red-black tree, treaps (a.k.a. Cartesian trees), etc. Note that the AP CS curriculum 
+does not require knowledge of any of these.
+
+When implementing a BST in Java, we don't need to explicitly delete any nodes.
+Removing all references to a node will automatically delete it (because Java
+has a garbage collector).
