@@ -1,0 +1,149 @@
+---
+title: Lists
+date: '2024-12-17'
+tags: ['Ch 19 Collections']
+draft: true
+summary: All about the collections List interface.
+---
+
+The `List` interface is used to represent a sequentially ordered group 
+of items, numbered by indexes (0 based indexing).
+
+Typically, when dealing with the `List` interface, we are dealing with 
+`ArrayList` and `LinkedList`. `Vector` is technically supported, but typically is not used.
+
+## ArrayLists
+
+To import `ArrayList`, add the following line at the top of your program.
+
+```java 
+import java.util.ArrayList;
+```
+
+An `ArrayList` functions as a dynamically sized array. For the full list of methods, see the 
+[documentation](https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html). 
+
+Here are the most commonly used methods:
+- `E get(int index)`
+  - Returns the element at the given index (0 based indexing)
+  - Time Complexity: $\mathcal{O}(1)$
+- `boolean add(E element)`
+  - Appends the element to the end of the list
+  - Always returns true
+  - Time Complexity: $\mathcal{O}(1)$ on average
+- `void add(int index, E element)`
+  - Inserts the element so the given index is its position in the list
+  - Time Complexity: $\mathcal{O}(n)$
+- `E remove(int index)`
+  - Removes the element at the specified position
+  - Returns the removed element
+  - Time Complexity: $\mathcal{O}(n)$
+- `boolean remove(Object o)`
+  - Removes the first occurence of our object
+  - Returns if an object was removed
+  - Time Complexity: $\mathcal{O}(n)$
+- `E set(int index, E element)`
+  - Sets the value at index to our new element
+  - Returns the previous element
+  - Time Complexity: $\mathcal{O}(1)$
+- `void clear()`
+  - Clears the array
+  - Time Complexity: $\mathcal{O}(1)$
+- `Object clone()`
+  - Returns a shallow copy of the array
+  - Time Complexity: $\mathcal{O}(n)$
+
+> [!NOTE]
+> For the `clone()` method, we are creating a new 
+> array with the **same references** as the array we are cloning.
+
+An `ArrayList` has two properties: its **size**, and **capacity**.
+What does this mean? The size is the number of elements currently
+inside the list, and the capacity is the size of the underlying array
+that holds contains our list items. As a programmer, we typically don't 
+need to worry about the capacity of our list.
+
+As a note, the way the `add` and `remove` operations work is that we 
+place our item in the array, then shift all the items accordingly.
+
+## LinkedLists
+
+To import `LinkedList`, add the following line at the top of your program.
+
+```java 
+import java.util.LinkedList;
+```
+
+A LinkedList is a doubly linked list implementation in Java. For the full list of methods, see the 
+[documentation](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html). 
+
+Here are the most commonly used methods:
+- `E get(int index)`
+  - Returns the element at the given index (0-based indexing)
+  - Time Complexity: $\mathcal{O}(n)$
+- `boolean add(E element)`
+  - Appends the element to the end of the list
+  - Always returns true
+  - Time Complexity: $\mathcal{O}(1)$
+- `void add(int index, E element)`
+  - Inserts the element so the given index is its position in the list
+  - Time Complexity: $\mathcal{O}(n)$
+- `E remove(int index)`
+  - Removes the element at the specified position
+  - Returns the removed element
+  - Time Complexity: $\mathcal{O}(n)$
+- `boolean remove(Object o)`
+  - Removes the first occurrence of the specified object
+  - Returns true if an object was removed
+  - Time Complexity: $\mathcal{O}(n)$
+- `E set(int index, E element)`
+  - Replaces the element at the given index with the new element
+  - Returns the previous element
+  - Time Complexity: $\mathcal{O}(n)$
+- `void clear()`
+  - Clears the list
+  - Time Complexity: $\mathcal{O}(n)$
+- `Object clone()`
+  - Returns a shallow copy of the list
+  - Time Complexity: $\mathcal{O}(n)$
+- `E getFirst()`
+  - Returns the first element in the list
+  - Time Complexity: $\mathcal{O}(1)$
+- `E getLast()`
+  - Returns the last element in the list
+  - Time Complexity: $\mathcal{O}(1)$
+- `E removeFirst()`
+  - Removes and returns the first element in the list
+  - Time Complexity: $\mathcal{O}(1)$
+- `E removeLast()`
+  - Removes and returns the last element in the list
+  - Time Complexity: $\mathcal{O}(1)$
+
+The general paradigm behind the linked list is that accessing 
+items randomly is slower, but removing or adding elements elements 
+is faster. 
+
+> [!CAUTION]
+> Do not iterate through a `LinkedList` by index. The time complexity of 
+> this is $\mathcal{O}(n^{2})$ because `.get()` has to travel from the front 
+> or back *all the way* to our current position, which blows up the number of 
+> operations done.
+> 
+> The preferred way is to use an iterator or to use a for-each loop.
+> 
+> ```java
+> List<Integer> list = new LinkedList<Integer>();
+> ```
+> 
+> ```java
+> for (int i = 0; i < n; i++) {
+>   int val = list.get(i); 
+>   // this is O(n^2)
+> }
+> ```
+> 
+> ```java
+> for (int val : list) {
+>   // this is O(n)
+> }
+> ```
