@@ -1,11 +1,26 @@
+'use client'
+
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 
 const MAX_DISPLAY = 5
+const DATE_SPLIT = 6
 
 export default function Home({ posts }) {
+  const curTime = new Date()
+  const filteredPosts = posts.filter((post) => {
+    const { slug, date, title, summary, tags } = post
+    const postDate = new Date(date)
+    const curMonth = curTime.getMonth() + (curTime.getMonth() <= DATE_SPLIT ? 12 : 0)
+    const postMonth = postDate.getMonth() + (postDate.getMonth() <= DATE_SPLIT ? 12 : 0)
+
+    return (
+      postMonth < curMonth || (postMonth == curMonth && postDate.getDate() < curTime.getDate() + 2)
+    )
+  })
+
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -18,8 +33,8 @@ export default function Home({ posts }) {
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {!posts.length && 'No posts found.'}
-          {posts.slice(0, MAX_DISPLAY).map((post) => {
+          {!filteredPosts.length && 'No posts found.'}
+          {filteredPosts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, summary, tags } = post
             return (
               <li key={slug} className="py-12">
