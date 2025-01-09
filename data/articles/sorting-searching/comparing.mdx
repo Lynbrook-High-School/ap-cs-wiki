@@ -1,0 +1,141 @@
+---
+title: Comparing Objects
+date: '2025-1-7'
+tags: ['Ch 13 Sorting Searching']
+draft: false
+summary: How we compare objects in Java.
+---
+
+In programming, we often need to search for objects, as well as sort a group
+of objects. 
+
+First, before talking about how to search for objects and how to sort objects,
+we need to know how to effectively **compare** objects. There are a few ways to 
+compare objects.
+- The `.equals()` method
+- The `.compareTo()` method
+- The `.compare()` method
+
+## `.equals()`
+
+As noted in the [objects](/articles/object-classes) article, using the `==`
+operator doesn't work as intended for objects because it only checks if the 
+references are equal (if they're the **same** object, not **equal**
+objects).
+
+
+
+We are all probably familiar with the `.equals()` method, as we often have to use
+it when comparing strings. Note that if we want to create our own object and have
+`.indexOf()` and `.contains()` work with it, we'll need to override the 
+`Object equals()` method.
+
+As an example of how to write an `equals` method, consider the following code snippet.
+
+```java
+public class Pet {
+    private String name;
+    
+    Pet(String name) {
+        this.name = name;
+    }
+    
+    public boolean equals(Object other) {
+        if (other == null || !(other instanceof Pet)) {
+            return false;
+        }
+        
+        Pet otherPet = (Pet) other;
+        
+        return name.equals(otherPet.name;
+    }
+}
+```
+
+The rough idea is as follows:
+1. Check if our other object CAN be reasonably compared to our current object.
+2. If this is the case, perform the comparison of the items.
+
+## `.compareTo()`
+
+The usage of this method is `obj1.compareTo(obj2)`. This method allows us to
+compare objects and determine if one object is "greater" than another.
+
+| **Result** | **Description**                                                                                 | **Example**                                          |
+|------------|-------------------------------------------------------------------------------------------------|----------------------------------------------------|
+| `0`        | Indicates that the two objects being compared are **equal**.                                    | `"abc".compareTo("abc")` returns `0`.             |
+| `< 0`      | Indicates that the current object is **less than** the object being compared to.                | `"abc".compareTo("def")` returns `-3`.            |
+| `> 0`      | Indicates that the current object is **greater than** the object being compared to.             | `"def".compareTo("abc")` returns `3`.             |
+
+> [!TIP]
+> It's easy to get mixed up by what each return value means, especially if you
+> code in a language like C++. One way to think about it is that 
+> `obj1.compareTo(obj2)` returns `obj1 - obj2`. Thus, for example,
+> `obj1 - obj2 < 0` translates to `obj1 < obj2`.
+
+Note that the `compareTo` method is a part of the `Comparable` interface.
+Thus, if you add a `compareTo` method, you should make your class extend the
+`Comparable` interface.
+
+```java
+public class Pet implements Comparable<Pet> {
+    private String name;
+    
+    Pet(String name) {
+        this.name = name;
+    }
+    
+    public int compareTo(Pet other) {
+        return name.compareTo(other.name);
+    }
+    
+    public boolean equals(Object other) {
+        return other instanceOf Pet && compareTo((Pet) other) == 0;
+    }
+}
+```
+
+While the `Comparable` interface doesn't strictly require you to override `.equals()` method, it's typically a good idea to do so (and in a way consistent to `.compareTo`).
+
+## `.compare()`
+
+This method isn't used that much in the AP CS curriculum, but is sometimes useful.
+We use this method when implementing a `Comparator` object.
+
+Say we want have a group of students, with each having a given ID, name, etc.
+Now, let's presume that we need to be able to sort them by their ID in some situations,
+and by their name in others. How do we manage that?
+
+Java provides us with a solution to this problem. There's an overloaded 
+sorting method that allows us to pass in a `Comparator object`.
+
+```
+Arrays.sort(T[] arr, Comparator<T> obj)
+```
+
+The idea is that we pass in a custom object that allows us to sort objects however
+we want. An example might make this idea a bit more concrete.
+
+```java
+class Pet {
+    private String name;
+    private int age;
+    
+    public int getAge() {
+        return age;
+    }
+    
+    Pet(String name) {
+        this.name = name;
+    }
+}
+
+class SortByAge implements Comparator<Pet> {
+    int compare(Pet a, Pet b) {
+        return a.getAge() - b.getAge();
+    }
+}
+```
+
+When writing a `.compare()` function, we apply the same rules we apply when writing
+the `.compareTo()` method. 

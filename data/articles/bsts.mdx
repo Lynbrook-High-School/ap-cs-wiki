@@ -76,6 +76,12 @@ FUNCTION SearchNode(curNode, value):
         RETURN SearchNode(curNode.right, value)
 ```
 
+## Deletion 
+
+Deleting values in a BST is significantly harder than the previous operation types because we 
+need to ensure that the tree maintains the BST property after deleting our value. To make the logic 
+easier to handle, let's consider the following three cases.
+
 ### Case 1: Deleted Node Has No Children  
 Simply delete the given node, as it has no children and its removal doesn't affect the tree's structure.
 
