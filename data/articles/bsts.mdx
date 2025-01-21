@@ -140,6 +140,25 @@ FUNCTION FindMin(curNode):
 
 ## Miscellaneous Information
 
+When performing an **in order traversal** of a binary search tree,
+we end up printing all the values in sorted order. Why is this?
+
+Consider how an inorder traversal works.
+
+```
+FUNCTION Traverse(curNode):
+    Traverse(curNode.left)
+    PRINT curNode
+    Traverse(curNode.right)
+```
+
+Recall how all the nodes in our left subtree are less than our current node,
+and how all the nodes in our right subtree are bigger than our current node.
+Thus, we can view an inorder traversal as recursively doing the following:
+- Printing all the values smaller than our current value
+- Print our current value
+- Print all the values bigger than our current value
+
 Here's a table for the speed of each operation.
 
 | Operation              | Best Case Time Complexity | Worst Case Time Complexity |

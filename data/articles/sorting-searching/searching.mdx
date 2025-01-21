@@ -1,0 +1,144 @@
+---
+title: Searching for Objects
+date: '2025-1-7'
+tags: ['Ch 13 Sorting Searching']
+draft: true
+summary: Going over sequential and binary search.
+---
+
+A common task in programming is to search some data structure (e.g. a list)
+for some item. To do this, there are two options: sequential search and binary
+search.
+
+## Sequential Search
+
+Let's say we have a list of names, and want to find the first occurrence of a given
+name.
+
+Sequential search would have us search from the start of the list and end when
+we find the name we want.
+
+```java
+/**
+ * @param arr our array of names
+ * @param name the name we want to find
+ * @return the index of the name given, or -1 if not found
+ */
+public static int findItem(String[] arr, String name) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i].equals(name)) {
+            return i;
+        }
+    }
+    return -1;
+}
+```
+
+
+| **Case**         | **Time Complexity** |
+|-------------------|---------------------|
+| Best Case         | $\mathcal{O}(1)$   |
+| Average Case      | $\mathcal{O}(n)$   |
+| Worst Case        | $\mathcal{O}(n)$   |
+
+
+## Binary Search
+
+Consider the following hypothetical game: 
+
+Your friend picks a random number between 
+$1$ and $100$. Your goal is to find their chosen
+number by asking the minimum number of questions.
+For each question, you can query a given number,
+and your friend has to tell you if your number is:
+- Less than your friend's number
+- Equal to your friend's number
+- Greater than your friend's number
+
+How would we go about solving this? If using sequential search, we would just
+go through every number until we found the number we need.
+
+Binary search takes a very different approach. Initially, the range of possible
+values is $[1, 100]$. If we query the value $50$, then we either end up eliminating
+the range $[1, 50]$ or $[51, 100]$, halving our search space. We repeat this process
+until we have found our answer.
+
+Because we are halving our search space after every query, the total number of 
+queries is $\mathcal{O}(\log{n})$.
+
+We can now apply this same logic to the problem of searching for an item in an
+array. If the array is sorted, we can keep on checking the midpoint of our 
+search range until we have our answer.
+
+```
+/**
+ * @param arr our sorted array of names
+ * @param name the name we want to find
+ * @return the index of the name given, or -1 if not found
+ */
+public static int findItem(String[] arr, String name) {
+    // the item in question should be in the range [low, high)
+    int low = 0;
+    int high = arr.length;
+    while (high - low > 1) {
+        int mid = (low + high) / 2;
+        if (arr[mid].equals(name)) {
+            return mid;
+        }
+        
+        if (arr[mid].compareTo(name) < 0) {
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+    
+    if (arr[low].equals(name)) {
+        return low;
+    }
+    
+    return -1;
+}
+```
+
+<Spoiler title="Formal Definition">
+
+The binary search algorithm finds the **splitting point** in a monotonic
+boolean function. What does this mean?
+
+Let's define some function $f(n)$, which returns some boolean for a given input.
+| $n$      | 0   | 1   | 2   | 3   | 4   | 5   |
+|--------|-----|-----|-----|-----|-----|-----|
+| $f(n)$ | 1   | 1   | 1   | 1   | 0   | 0   |
+
+Essentially, $f(n)$ maintains a value (either true or false) for a while, and then
+permanently switches after a certain point. Our algorithm finds this switching
+point.
+
+As an example, the problem of finding a value in a sorted array can be modeled
+as finding the splitting point for the following function:
+
+$$
+f(n) = \text{arr}[n] \leq \text{name}
+$$
+
+</Spoiler>
+
+| **Case**          | **Time Complexity**      |
+|-------------------|--------------------------|
+| Best Case         | $\mathcal{O}(1)$         |
+| Average Case      | $\mathcal{O}(\log{n})$   |
+| Worst Case        | $\mathcal{O}(\log{n})$   |
+
+## Choosing Which Method To Use
+
+Binary search has the following preconditions:
+- The data must be sorted.
+- The data structure must allow $\mathcal{O}(1)$ random access (e.g. an array)
+  - For example, binary search wouldn't work well on a linked list
+
+Also, for small data, binary search loses its advantage. In fact, because sequential
+search is so simple, it's sometimes faster than binary search in smaller data sets.
+
+Thus, for practical reasons, we typically only use binary search on data sets where
+sequential search becomes excessively slow.

@@ -1,0 +1,167 @@
+---
+title: Heaps
+date: '2025-3-7'
+tags: ['Misc']
+draft: true
+summary: All about heaps.
+---
+
+Say we need a data structure that can perform the following operations.
+
+
+| Operation              | Time Complexity          |
+|------------------------|--------------------------|
+| Peek Min/Max Value     | $\mathcal{O}(1)$         |
+| Remove Min/Max value   | $\mathcal{O}(\log{n})$   |
+| Insert Value           | $\mathcal{O}(\log{n})$   |
+
+A binary search tree (implemented as `TreeSet`) technically can do all of these things. However,
+it's considerably slower than the **heap** data structure.
+
+In Java, heaps are implemented as `java.util.PriorityQueue`. This implementation is
+known as a **min-heap**, in that the top element is the **smallest**. Other implementations
+(such as C++'s `std::priority_queue`) are **max-heaps**, which have the **largest** element
+at the top.
+
+## Definition of a Heap
+
+A heap is a complete binary tree, where each node has higher priority than its
+children. For a min-heap, the heap property is as follows:
+
+$$
+a[\text{parent}(i)] \leq a[i]
+$$
+
+for all values of $i$ not the root.
+
+> [!NOTE]
+> A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible.
+> 
+> For example, this is a complete binary tree:
+> ![Complete Binary Tree](/static/images/heaps/complete_tree.png)
+> 
+> And this is **not** a complete binary tree:
+> ![Binary Tree](/static/images/heaps/binary_tree.png)
+
+Because a heap is a complete binary tree, the following property holds:
+- Node $i$'s left child is $2i+1$
+- Note $i$'s right child is $2i + 2$
+
+Note that this indexing assumes that our root node is $0$.
+
+This allows us to implement a heap as an array (typically an `ArrayList`).
+
+As a note, we consider a heap to be partially ordered; however, none of the
+neat properties of the binary search tree apply to it. 
+
+## Insertions
+
+We use the following algorithm to add a new element into our heap.
+- Add the element to the back of our array
+- Move our element up the heap as needed (until the heap property is satisfied)
+
+To clarify on the second step, we keep on moving up our inserted element until
+either its at the root or its parent has higher priority than it.
+
+Note that because our tree is complete, the depth of the tree is 
+$\mathcal{O}(\log{n})$. Since insertion can only perform as many operations as
+there are levels to the tree, the time complexity of inserting an element is 
+$\mathcal{O}(\log{n})$.
+
+## Removal
+
+We use the following algorithm to remove the top element from our heap.
+- Remove the last element, and place it at the top
+- Move this last element down the heap
+
+To clarify on the second step, if its child with the most priority has higher
+priority than our current element, then we swap it with said child. 
+
+For similar reasons, the time complexity of this operation is $\mathcal{O}(\log{n})$.
+
+## Building Our Heap
+
+The naive way of building a heap from a heap is to just insert every element
+in our array into our heap. This has a time complexity of $\mathcal{O}(n \log{n})$.
+
+While this approach is perfectly fine, there is a faster way of doing it.
+Consider the following algorithm:
+- Iterate over non-leaf nodes in reverse order
+- Use a recursive method to heapify the subtree of the node we are iterating on
+
+Instead of being $\mathcal{O}(n \log{n})$, this algorithm is $\mathcal{O}(n)$.
+
+Here's some pseudocode to demonstrate the algorithm.
+
+```
+FUNCTION Heapify(array, n, i):
+    largest ← i
+    left ← 2 * i + 1
+    right ← 2 * i + 2
+
+    IF left < n AND array[left] > array[largest]:
+        largest ← left
+
+    IF right < n AND array[right] > array[largest]:
+        largest ← right
+
+    IF largest ≠ i:
+        SWAP array[i] AND array[largest]
+        Heapify(array, n, largest)
+
+FUNCTION BuildHeap(array, n):
+    FOR i ← (n / 2) - 1 DOWN TO 0:
+        Heapify(array, n, i)
+```
+
+To understand why this converts our array to a heap, consider the following
+facts:
+- Each leaf of our tree satisfies the heap property
+- When we call `Heapify` in the `BuildHeap` array, we assume that the children nodes of the indice we are at are heaps
+
+Thus, we know that once we are done Heapifying our subtree, it will satisfy the 
+heap property. Note that the code used to heapify our array is similar to the
+code needed to delete an element in our array - that is, they both require us 
+to move a node down the heap into its correct place.
+
+<Spoiler title="Proof of Time Complexity">
+
+Note that the proof of time complexity requires some calculus knowledge, and 
+knowing the proof is **not** necessary.
+
+Let $h$ denote the height of our tree - this is roughly equal to $\log_2{n}$.
+At each level $i$, we have at most $\frac{n}{2^{i}}$ nodes,
+and we need to do $\mathcal{O}(h)$ swaps per node. Putting these 
+together, we reach the following expression:
+
+$$
+\sum_{i=0}^{h}{\frac{n}{2^{i}} \cdot \mathcal{O}(h)}
+$$
+
+Doing some rewriting, we can reach the following bound:
+
+$$
+\mathcal{O}(n \cdot \sum_{i=0}^{h}{\frac{i}{2^{i}}})
+$$
+
+Let's consider the series term. Because we are evaluating the asymptotic
+complexity, we can consider it as an infinite series.
+
+$$
+\sum_{i=0}^{\infty}{\frac{i}{2^{i}}}
+$$
+
+Using the [ratio test](https://en.wikipedia.org/wiki/Ratio_test), we can 
+see that this series converges to a constant value. Thus, we find the 
+time complexity to be $\mathcal{O}(n)$.
+
+</Spoiler>
+
+## Implementing Our Heap 
+
+Typically, we use a dynamic array (such as an `ArrayList`) or something 
+similar. Then, we implement the following methods:
+- `reheapUp`: moves a node up so it's in its correct place 
+- `reheapDown`: moves a node down so it's in its correct place 
+
+All the heap operations can be expressed in terms of these two methods.
