@@ -41,16 +41,22 @@ You can find an animation of how this works [here](https://www.w3schools.com/dsa
 public static void selectionSort(int[] arr) {
     int n = arr.length;
     for (int i = 0; i < n; i++) {
+		// best = the smallest value with index >= i
         int best = i;
+
         for (int j = i + 1; j < n; j++) {
+			// compare this element to our current smallest
             if (arr[best] > arr[j]) {
                 best = j;
             }
         }
 
+		// swap arr[i] and arr[best]
         int temp = arr[i];
         arr[i] = arr[best];
         arr[best] = temp;
+
+		// now, the prefix [0, i] has all of its final sorted values
     }
 }
 ```
@@ -61,6 +67,13 @@ public static void selectionSort(int[] arr) {
 | Average Case     | $\mathcal{O}(n^{2})$  | Average comparisons are dominated by $\mathcal{O}(n^{2})$. |
 | Worst Case       | $\mathcal{O}(n^{2})$  | Same as average case; scans all elements.            |
 | Space Complexity | $\mathcal{O}(1)$      | In-place sorting.                                     |
+
+### Pros
+- Easy to code 
+- In place (no extra allocation needed)
+
+### Cons 
+- Slow in both the best, worse, and average case
 
 ## Insertion Sort
 
@@ -73,15 +86,21 @@ iterate through each element in our unsorted
 list, and insert it into its correct position
 in the sorted list.
 
-You can find an animatino of how this works
+You can find an animation of how this works
 [here](https://www.w3schools.com/dsa/dsa_algo_insertionsort.php).
 
 ```java
 public static void insertionSort(int[] arr) {
     int n = arr.length;
     for (int i = 1; i < n; i++) {
+		/*
+		 * The prefix [0, i - 1] is already sorted, so to insert our value a[i]
+		 * into our sorted list, we just need to keep on swapping the values
+		 */
         int j = i - 1;
         while (j >= 0 && arr[j] > arr[j + 1]) {
+			// we swap elements j and j + 1
+			// note that arr[j + 1] is our original arr[i]
             int temp = arr[j + 1];
             arr[j + 1] = arr[j];
             arr[j] = temp;
@@ -101,6 +120,14 @@ just a tad easier to think of it that way.
 | Worst Case       | $\mathcal{O}(n^{2})$  | Requires full comparisons when reversed.              |
 | Space Complexity | $\mathcal{O}(1)$      | In-place sorting.                                     |
 
+### Pros 
+- Easy to code 
+- In place (no extra allocation needed)
+- Very fast for small arrays 
+
+### Cons 
+- Worst case $\mathcal{O}(n^2)$ makes it impractical for large arrays
+
 ## Merge Sort
 
 We are now moving on to our first "fast" sorting algorithm. Merge sort, unlike 
@@ -115,38 +142,42 @@ The rough procedure goes as follows:
 To do step 3, we use the fact that the left and right halfs are sorted to our
 advantage. We create a new list, and use the following procedure while we 
 still have elements to add to the list.
-- Compare the first available elements in the left and right halves
+- Compare the first available element in the left and right halves
 - Add the smaller element to the back of our list
 
 If one list is empty, we add all the contents of the other list to the back of
 our resulting list.
 
-Note that this sorting algorithm is really good for data structures without 
-random access (e.g. linked lists) because the merging step only requires us to
-know the first element in the left and right halves.
-
 ```java
 public static void mergeSort(int[] arr, int l, int r) {
+	// base case: if length of [l, r] < 2, we do nothing
     if (l >= r) { return; }
+
+	// we recursively sort the left and right halves
     int mid = (l + r) / 2;
     mergeSort(arr, l, mid);
     mergeSort(arr, mid + 1, r);
 
-    // if the array is already sorted, we don't need to do anything
+    // if left and right sides form a sorted array
+	// when merged, then just do nothing
     if (arr[mid] <= arr[mid + 1]) {
         return;
     }
 
+	// explicitly construct list for left side
     int[] left = new int[mid - l + 1];
     for (int i = l; i <= mid; i++) {
         left[i - l] = arr[i];
     }
 
+	// explicitly construct list for right side
     int[] right = new int[r - mid];
     for (int i = mid + 1; i <= r; i++) {
         right[i - (mid + 1)] = arr[i];
     }
 
+	// maintain the current element we're on for 
+	// the left and right subarrays
     int leftIdx = 0;
     int rightIdx = 0;
     for (int i = l; i <= r; i++) {
@@ -168,6 +199,9 @@ public static void mergeSort(int[] arr, int l, int r) {
     }
 }
 ```
+
+Consider checking out [this](https://gist.github.com/TheGamingMousse/ed375eb3c987346d3a236090eb2f9e91) implementation for shorter (although more confusing)
+code.
 
 | Case             | Time Complexity        | Explanation                                           |
 |------------------|------------------------|-------------------------------------------------------|
@@ -207,6 +241,14 @@ we find $T(n) = \mathcal{O}(n \log{n})$.
 
 </Spoiler>
 
+### Pros 
+- Fast asymptotic complexity, making it good for large arrays 
+- Same time complexity for sequential access (e.g. linked lists) and for random access (e.g. arrays)
+- Sort is stable (i.e. it doesn't change the relative order between elements with equal value)
+
+### Cons 
+- Requires allocating an extra array 
+
 ## Quick Sort
 
 Quick sort, like merge sort, is a divide and conquer sorting algorithm.
@@ -230,3 +272,12 @@ roughly works.
 In the best case scenario, our pivot choice splits our array into two roughly
 equal subarrays. However, it is possible
 that we choose the biggest or smallest element as our pivot, leading to a runtime of $\mathcal{O}(n^{2})$.
+
+### Pros 
+- In place (no extra allocation needed)
+- On average, is often faster than merge sort and other sorting algorithms
+
+### Cons 
+- Worst case complexity is $\mathcal{O}(n^{2})$
+
+Quick sort is often used in various hybrid sorting algorithms. For example, C++'s default sorting algorithm uses IntroSort, a hybrid between Quick Sort, Heap Sort, and Insertion Sort.
