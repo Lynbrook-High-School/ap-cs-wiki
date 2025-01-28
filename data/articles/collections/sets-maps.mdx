@@ -1,0 +1,198 @@
+---
+title: Sets and Maps
+date: '2024-12-17'
+tags: ['Ch 19 Collections']
+draft: false
+summary: Two more Collections interfaces.
+---
+
+Say we need to keep some list of numbers, and need to process the 
+following operations:
+- Adding to our list of numbers 
+- Removing a given number from our list of numbers 
+- Querying if a number is in our list 
+- Giving our number a mapped value 
+
+Something like an `ArrayList` could technically support these operations,
+but it would be slow. Java provides two interfaces to solve these problems: the `Set` and `Map` interfaces.
+
+## Sets 
+
+Sets, like their math counterparts, are (optionally ordered) lists of distinct elements. That is, our set can't have duplicate elements.
+
+For a full list of methods in the `Set` interface, refer to the 
+[documentation](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html). Here are some of the more commonly used ones:
+- `boolean add(E element)`
+  - Adds our element to the set. 
+  - Returns true if the element was not previously in the set 
+
+- `boolean remove(Object o)`
+  - Removes the given object from the set (if present)
+  - Returns true if we removed anything
+
+- `void clear()`
+  - Removes all elements from the set 
+
+- `boolean contains(Object o)`
+  - Returns true if the object is in the set 
+
+- `int size()`
+  - Returns the number of elements in the set 
+
+Java supplies us two kinds of sets: **TreeSets** and **HashSets**.
+
+### TreeSets 
+
+TreeSets are **ordered** sets. That is, if we iterate through all the elements
+in the set, they would be iterated in sorted order.
+
+```java
+Set<Integer> nums = new TreeSet<>();
+nums.add(5);
+nums.add(3);
+nums.add(100);
+
+System.out.println(nums); // prints [3, 5, 100]
+```
+
+Note that TreeSets also support types like Strings. For Strings, they are 
+sorted in **lexicographical** order.
+
+<Spoiler title="Lexicographical Order Meaning">
+
+It essentially means sorted in dictionary order. That is, if we were
+to compare two strings, we would:
+- Find the first position in which the strings differ 
+- Compare that character 
+
+Note that if one string is a substring of another, the shorter string goes first.
+
+</Spoiler>
+
+```java
+Set<String> nums = new TreeSet<>();
+nums.add("lynbrook");
+nums.add("ap");
+nums.add("cs");
+nums.add("apcs");
+
+System.out.println(nums); // prints [ap, apcs, cs, lynbrook]
+```
+
+| **Operation** | **Average Case**        | **Worst Case**          |
+|---------------|-------------------------|-------------------------|
+| **Add**       | $\mathcal{O}(\log{n})$ | $\mathcal{O}(\log{n})$ |
+| **Remove**    | $\mathcal{O}(\log{n})$ | $\mathcal{O}(\log{n})$ |
+| **Contains**  | $\mathcal{O}(\log{n})$ | $\mathcal{O}(\log{n})$ |
+| **Iteration** | $\mathcal{O}(n)$       | $\mathcal{O}(n)$       |
+
+
+### HashSets 
+
+HashSets are **unordered** sets. They are **not** ordered in ANY meaningful way!
+
+If you try inserting some elements, they might seem to be sorted.
+
+```java
+Set<Integer> nums = new HashSet<>();
+nums.add(1000);
+nums.add(2);
+nums.add(1);
+
+System.out.println(nums); // prints [1, 2, 1000]
+```
+
+However, further experimentation will show that they aren't ordered.
+
+```java
+Set<Integer> nums = new HashSet<>();
+nums.add(1000);
+nums.add(2);
+nums.add(50000);
+
+System.out.println(nums); // prints [50000, 2, 1000]
+```
+
+| **Operation** | **Average Case**        | **Worst Case**          |
+|---------------|-------------------------|-------------------------|
+| **Add**       | $\mathcal{O}(1)$       | $\mathcal{O}(n)$       |
+| **Remove**    | $\mathcal{O}(1)$       | $\mathcal{O}(n)$       |
+| **Contains**  | $\mathcal{O}(1)$       | $\mathcal{O}(n)$       |
+| **Iteration** | $\mathcal{O}(n)$       | $\mathcal{O}(n)$       |
+
+## Maps 
+
+With maps, we can associate **keys** with their **values**.
+
+> [!NOTE]
+> We can think of keys as being our identifiers, and our value being 
+> what's associated with our key.
+> 
+> For example, let's say we want to map a capital city to its country.
+> In this case, our **key** would be the country, and our **value** 
+> would be the capital city.
+
+We can think of maps as a set of $(\text{key}, \text{value})$ pairs. **Each key can only have 
+one value associated with it!**
+
+For a full list of methods in the Map interface, refer to the [documentation](https://docs.oracle.com/javase/8/docs/api/java/util/Map.html). Here are some of the more commonly used ones:
+
+- `V put(K key, V value)`
+  - Maps our given value to our given key 
+  - Returns the previous value associated with our key, or `null` 
+- `V remove(Object key)`
+  - Removes the key-value pair associated with the given key 
+  - Returns the previous value associated with the key, or `null`
+- `V replace(K key, V value)`
+  - Assigns our given key to the given value **if** it's in our map
+	- Returns the previous value associated with the key 
+- `V get(Object key)`
+  - Returns the value associated with our key, or `null`
+- `boolean containsKey(Object key)`
+  - Returns whether or not the key is present in our map 
+- `int size()`
+  - Returns the number of $(\text{key}, \text{value})$ pairs in our map
+
+Note that `K` refers to our key value type, and `V` returns to the type of our value.
+
+### TreeMaps
+
+Recall that a map is essentially a set of key-value pairs. A TreeMap 
+is basically a TreeSet of these pairs. Because of this, we store the 
+keys in sorted order, sort of like a TreeSet.
+
+```java
+Map<String, String> capitals = new TreeMap<>();
+capitals.put("USA", "Washington D.C.");
+capitals.put("France", "Paris");
+capitals.put("Canada", "Ottawa");
+
+// prints {Canada=Ottawa, France=Paris, USA=Washington D.C.}
+System.out.println(capitals); 
+```
+
+All the key-value pairs are sorted by their key; their associated 
+value does not affect the ordering.
+
+### HashMaps
+
+Similar to HashSets, HashMaps are **not** ordered in any meaningful way.
+They function similarly to TreeMaps; just that the keys are not sorted.
+
+```java
+Map<String, String> capitals = new HashMap<>();
+capitals.put("USA", "Washington D.C.");
+capitals.put("France", "Paris");
+capitals.put("Canada", "Ottawa");
+
+// prints {Canada=Ottawa, USA=Washington D.C., France=Paris}
+System.out.println(capitals); 
+```
+
+## TreeSet/TreeMap vs HashSet/HashMap 
+
+Both the Tree and Hash variants are pretty fast data structures. However,
+HashSets/HashMaps are usually faster than their ordered counterparts.
+
+Because of this, the choice mainly comes down to if you need the keys in sorted order. For example, if we need to map countries with their respective capital cities, we *probably* don't need to be able to iterate 
+through our countries in sorted order. 
