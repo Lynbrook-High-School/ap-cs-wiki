@@ -1,0 +1,158 @@
+---
+title: Lookup and Hash Tables
+date: '2024-12-7'
+tags: ['Ch 24 Lookup/Hash Tables']
+draft: false
+summary: Efficiently querying for data entries.
+---
+
+## Lookup Tables
+
+Lookup tables rely on some function that can convert our **key** into some 
+**index** in an array. In addition, each key can only be mapped to **one** index.
+
+Let us say we have an array $n$ to store our table, and some function $f(k)$ that
+converts our key $k$ into some value. Then, all values of $f(k)$ must be 
+in the range of $[0, n)$ and it must be a **one to one mapping**. That is, 
+each key can only map to one value, and vice versa.
+
+Lookup tables are most often used for quick data retrieval; by precomputing a 
+lookup table, we can save a lot of computation time.
+
+As a trivial example, let's say we need to calculate $3^n$ many times. Instead 
+of manually computing this power every time, we can instead store each power in 
+a lookup table. By doing this, we turn a somewhat expensive computation into 
+a quick array indexing operation.
+
+Lookup tables also have more complex applications; for example, they can also 
+be used to efficiently find the number of set bits in a binary number (e.g. 
+the number 37 is equal to `00100101` in binary, so it has 3 set bits). For those curious,
+[this Wikipedia article](https://en.wikipedia.org/wiki/Lookup_table) explains
+how we can use a lookup table to optimize this operation.
+
+## Hash Tables
+
+For now, let's think of a hash table as being a `HashSet`. That is, we want 
+our table to support the following operations:
+- Insert items 
+- Remove items 
+- Query if item is present in set
+
+Note that a `HashMap` would be implemented in practically the same way as a `HashSet`.
+A `HashMap` can be viewed as a `HashSet` of $(\text{key, value}$) pairs, where 
+we only hash the keys. 
+
+Hash tables operate on a similar philosophy to lookup tables; we need some 
+function that can turn our key into a valid array index. However, for hash tables,
+**our hash function does not need to be invertible**. That is,
+we can allow our hash function to return the same value for different keys.
+
+> [!NOTE]
+> Typically, our hash function will end up returning numbers larger than the size
+> of our hash table. To solve this issue, we modulo the hashed value by the size
+> of the table. For example, if our key has a hash value of $5$ and our table is of size $3$,
+> then we would map this value to indice $5 \bmod 3$, which is $2$.
+
+A **collision** is when two different keys map to the same hash value. For example,
+let's say we have a hash table of strings, and we want to insert the strings 
+$\text{“dog”}$ and $\text{“cat”}$. If $\text{hash}(\text{“dog”})$ and $\text{hash}(\text{“cat”})$ map to the same location in the array, then we have a collision.
+
+Like a lookup table, hash tables are internally an array that stores all the values
+we put into it. We generally want our hash function to uniformly distribute our 
+values, to avoid excessive collisions.
+
+For now, let's think of our hash table as functioning like a `HashSet`. That is,
+we want our hash table to support adding, removing, and checking if an element
+is in the table.
+
+### Handling Collisions
+
+There are two methods to handling collisions: **probing** and **chaining**. The method we choose to 
+handle collisions will determine how we find elements in our table.
+
+In AP CS, we mainly care about chaining. However, probing is also a very common 
+strategy to resolve collisions; thus, it's a good idea to understand the basics behind how probing works.
+
+#### Chaining
+
+At each indice in our hash table array, we keep a list of elements that keeps 
+track of which elements are present at this indice. Typically, we call this list of 
+elements a **bucket**. To search for an element, we iterate through the item's respective bucket and see 
+if it's there. 
+
+As a note: if we want to handle the operations that a `HashSet` needs, then 
+we need to make our list inside our table a `LinkedList`, not an `ArrayList`.
+Something like a `TreeSet` would also work, but would probably be slower if our 
+hash function is good enough.
+
+When it comes to implementing chaining, we need to decide which data structure 
+to use to represent our buckets. We have two main options:
+- Linked lists: fast deletion, slow searching, good constant factor 
+- Binary search trees (e.g. TreeSet): fast deletion, fast searching, bad constant factor 
+
+Java's implementation of hash tables (`HashSet` and `HashMap`) use chaining. As 
+for buckets, it uses linked lists when buckets are small, and BSTs when they become 
+too large.
+
+#### Probing
+
+In this case, every cell in our hash table is either empty or contains some 
+value inserted into our set. For now, let's only consider the cases of searching for 
+and inserting elements; deleting elements is a bit more nuanced.
+
+Let's consider inserting an element that maps to some indice $i$ in our table. For now, let's assume this element is 
+not already in our table. Then, we would linearly search through our array until 
+we find an empty cell. 
+
+```
+function insert(hash_table, key):
+	idx = HashFunction(key) % table_size
+
+	while (hash_table[idx] != EMPTY):
+		// d is some arbitrary increment, typically set to 1
+		idx = (idx + d) % table_size 
+	
+	hash_table[idx] = key 
+```
+
+Now, let's say we need to search for an element. We follow practically 
+the same procedure as insertion. However, we stop whenever we either 
+encounter an empty cell or the element we are searching for. The reason we can 
+stop once encountering an empty cell is because we know that the element we want 
+would have been inserted at that empty cell if it was present in our set (or it would 
+have been encountered earlier).
+
+Deletion is a tad tricky; recall how, to search for an item, we always stop once 
+at an empty cell. However, deleting a given item will mess up the search process
+for any item that had to "jump" over the item we want to delete. There are a few 
+ways of addressing this issue which are beyond the scope of what we need to know. 
+For those curious, the deletion process is described [here](https://en.wikipedia.org/wiki/Linear_probing).
+
+### Load Factor
+
+With a hash table, we want to make our hash table's roughly proportional to the 
+number of items inside our hash table. If we have a huge amount of elements in 
+a really small table, then we are more likely to many collisions, which
+would hinder the performance of our hash table.
+
+To prevent the scenario above from happening, we want to resize our hash table
+every so often. We define the **load factor** to be the following:
+
+$$
+\text{loadFactor} = \frac{\text{numItems}}{\text{tableSize}}
+$$
+
+We also define a constant **load factor limit**. If our current 
+load factor is greater than our load factor limit, then we need to expand
+our hash table.
+
+To expand our hash table, we have to increase the size of our table, and rehash
+all of our elements. Recall how the indice we place an element at is modulo
+the table size; if our table size changes, then the indice we place our element
+at also changes.
+
+Generally, we set our load factor to $0.75$, and we double the size of our table
+every time we hit the load factor. If our load factor is too large, we will have
+too many collisions because multiple elements will get mapped to the same bucket.
+However, if our load factor is too small, we will end up with a lot of empty buckets,
+which is wasteful. 

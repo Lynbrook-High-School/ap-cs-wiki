@@ -196,3 +196,6 @@ HashSets/HashMaps are usually faster than their ordered counterparts.
 
 Because of this, the choice mainly comes down to if you need the keys in sorted order. For example, if we need to map countries with their respective capital cities, we *probably* don't need to be able to iterate 
 through our countries in sorted order. 
+
+The Tree and Hash variants are also different when it comes to implementation. TreeSets/TreeMaps require their elements to implement 
+the `Comparable` interface (a.k.a. have a `.compareTo()` method), while HashSets/HashMaps require overloading the `.equals()` and `.hashCode()` methods.
