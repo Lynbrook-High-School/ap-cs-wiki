@@ -1,6 +1,6 @@
 ---
 title: Lookup and Hash Tables
-date: '2024-12-7'
+date: '2025-2-7'
 tags: ['Ch 24 Hash Tables']
 draft: false
 summary: Efficiently querying for data entries.
@@ -39,7 +39,7 @@ our table to support the following operations:
 - Query if item is present in set
 
 Note that a `HashMap` would be implemented in practically the same way as a `HashSet`.
-A `HashMap` can be viewed as a `HashSet` of $(\text{key, value}$) pairs, where 
+A `HashMap` can be viewed as a `HashSet` of $(\text{key, value})$ pairs, where 
 we only hash the keys. 
 
 Hash tables operate on a similar philosophy to lookup tables; we need some 
@@ -79,11 +79,6 @@ At each indice in our hash table array, we keep a list of elements that keeps
 track of which elements are present at this indice. Typically, we call this list of 
 elements a **bucket**. To search for an element, we iterate through the item's respective bucket and see 
 if it's there. 
-
-As a note: if we want to handle the operations that a `HashSet` needs, then 
-we need to make our list inside our table a `LinkedList`, not an `ArrayList`.
-Something like a `TreeSet` would also work, but would probably be slower if our 
-hash function is good enough.
 
 When it comes to implementing chaining, we need to decide which data structure 
 to use to represent our buckets. We have two main options:
