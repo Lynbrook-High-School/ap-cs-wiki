@@ -129,6 +129,71 @@ For those curious, the deletion process is described [here](https://en.wikipedia
 
 ### Load Factor
 
+If we have a huge amount of elements in a really small table, then 
+we are bound to have an undesirable amount of collisions. With chaining, 
+this leads to our buckets getting really big, which makes searching through each bucket slow. Probing fares even worse; if we have too many 
+elements in our table, then inserting or searching for elements becomes 
+slow because we have to linearly search through our table. 
+
+To fix this, we resize the table once too many elements are inside our table. How do we determine if our table has too many elements? Let's 
+define the following proportion: 
+
+$$
+\text{loadFactor} = \frac{\text{numItems}}{\text{tableSize}}
+$$
+
+Generally, we set our load factor to $0.75$, and we double the size of our table
+every time we hit the load factor. If our load factor is too large, we will have
+too many collisions because multiple elements will get mapped to the same bucket.
+However, if our load factor is too small, we will end up with a lot of empty buckets,
+which is wasteful. 
+
+Note that resizing our table requires creating an entirely new table, and 
+reinserting all of the items in our table. This is because every key's 
+hash is typically much larger than the table's size, so we have to modulo 
+the hash value by our table size. However, if we change the table's size,
+all the previous positions are incorrect. Thus, we need to recalculate 
+all the locations in the table.
+
+## Summary 
+
+Both hash and lookup tables allow us to quickly retrieve information 
+if we have a function that can turn our keys into some indice in our 
+table. Note that hash tables and hash sets/maps are related; we use a 
+hash table to implement a `HashSet`.
+
+Hash tables and lookup tables are always implemented as an array 
+(or an `ArrayList`). For hash tables, it's possible that two different 
+keys map to the same location in our underlying array. This is known as a 
+**collision**. There are two methods to resolve collisions. 
+
+### Chaining 
+
+At each array indice in our table, we keep a container to keep all the items that are mapped to this position. This is typically called a 
+**bucket**. The container of choice for our buckets is typically either 
+linked lists or binary search trees (`LinkedList` and `TreeSet`). 
+
+### Probing 
+
+Let's say we want to insert some item that maps to indice $i$ in our 
+hash table. If $i$ is empty, then we insert our item there. Otherwise, 
+we check if indice $i + 1$ is empty. If so, we insert it there. Otherwise, we check $i + 2$, and so on until we find a suitable position.
+Note that if the position we check goes outside of our hash table, then we modulo the indice by the table size. The following pseudocode 
+demonstrates the insertion algorithm.
+
+```
+function insert(hash_table, key):
+	idx = hash_func(key) % table_size
+
+	while (hash_table[idx] != EMPTY):
+		// d is some arbitrary increment, typically set to 1
+		idx = (idx + d) % table_size 
+	
+	hash_table[idx] = key 
+```
+
+### Resizing Our Table 
+
 With a hash table, we want to make our hash table's roughly proportional to the 
 number of items inside our hash table. If we have a huge amount of elements in 
 a really small table, then we are more likely to many collisions, which
@@ -141,17 +206,11 @@ $$
 \text{loadFactor} = \frac{\text{numItems}}{\text{tableSize}}
 $$
 
-We also define a constant **load factor limit**. If our current 
-load factor is greater than our load factor limit, then we need to expand
-our hash table.
+Now, once our load factor is too big, we resize the table. Typically, 
+we set our maximum load factor to something like $0.75$ to optimize 
+for both memory and speed. 
 
 To expand our hash table, we have to increase the size of our table, and rehash
 all of our elements. Recall how the indice we place an element at is modulo
 the table size; if our table size changes, then the indice we place our element
 at also changes.
-
-Generally, we set our load factor to $0.75$, and we double the size of our table
-every time we hit the load factor. If our load factor is too large, we will have
-too many collisions because multiple elements will get mapped to the same bucket.
-However, if our load factor is too small, we will end up with a lot of empty buckets,
-which is wasteful. 
