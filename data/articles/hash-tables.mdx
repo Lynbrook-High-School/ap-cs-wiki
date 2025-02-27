@@ -38,9 +38,9 @@ our table to support the following operations:
 - Remove items 
 - Query if item is present in set
 
-Note that a `HashMap` would be implemented in practically the same way as a `HashSet`.
-A `HashMap` can be viewed as a `HashSet` of $(\text{key, value})$ pairs, where 
-we only hash the keys. 
+Check out [this article](https://lynbrook-high-school.github.io/ap-cs-wiki/articles/collections/sets-maps#sets)
+for a refresher on `HashSet` operations and behavior, as well as the relation between `HashSet` and
+`HashMap`.
 
 Hash tables operate on a similar philosophy to lookup tables; we need some 
 function that can turn our key into a valid array index. However, for hash tables,
@@ -61,37 +61,35 @@ Like a lookup table, hash tables are internally an array that stores all the val
 we put into it. We generally want our hash function to uniformly distribute our 
 values, to avoid excessive collisions.
 
-For now, let's think of our hash table as functioning like a `HashSet`. That is,
-we want our hash table to support adding, removing, and checking if an element
-is in the table.
-
 ### Handling Collisions
 
 There are two methods to handling collisions: **probing** and **chaining**. The method we choose to 
 handle collisions will determine how we find elements in our table.
 
 In AP CS, we mainly care about chaining. However, probing is also a very common 
-strategy to resolve collisions; thus, it's a good idea to understand the basics behind how probing works.
+strategy to resolve collisions; thus, it's a good idea to understand the basics behind both methods.
 
 #### Chaining
 
 At each indice in our hash table array, we keep a list of elements that keeps 
 track of which elements are present at this indice. Typically, we call this list of 
-elements a **bucket**. To search for an element, we iterate through the item's respective bucket and see 
+elements a **bucket**. To search for an element, we search the item's respective bucket and see 
 if it's there. 
 
 When it comes to implementing chaining, we need to decide which data structure 
-to use to represent our buckets. We have two main options:
+to use to represent our buckets. We have two options:
 - Linked lists: fast deletion, slow searching, good constant factor 
 - Binary search trees (e.g. TreeSet): fast deletion, fast searching, bad constant factor 
 
 Java's implementation of hash tables (`HashSet` and `HashMap`) use chaining. As 
 for buckets, it uses linked lists when buckets are small, and BSTs when they become 
-too large.
+too large. This is optimal because linked lists are typically faster if the buckets are 
+really small; however, in larger buckets, sequentially searching for items is expensive,
+making BSTs a better option.
 
 #### Probing
 
-In this case, every cell in our hash table is either empty or contains some 
+If we use probing, every cell in our hash table is either empty or contains some 
 value inserted into our set. For now, let's only consider the cases of searching for 
 and inserting elements; deleting elements is a bit more nuanced.
 
@@ -101,7 +99,7 @@ we find an empty cell.
 
 ```
 function insert(hash_table, key):
-	idx = HashFunction(key) % table_size
+	idx = hash_func(key) % table_size
 
 	while (hash_table[idx] != EMPTY):
 		// d is some arbitrary increment, typically set to 1
@@ -112,15 +110,21 @@ function insert(hash_table, key):
 
 Now, let's say we need to search for an element. We follow practically 
 the same procedure as insertion. However, we stop whenever we either 
-encounter an empty cell or the element we are searching for. The reason we can 
-stop once encountering an empty cell is because we know that the element we want 
-would have been inserted at that empty cell if it was present in our set (or it would 
-have been encountered earlier).
+encounter an empty cell or the element we are searching for. If we run into 
+an empty cell and haven't seen the element we are searching for, then we know 
+it's not in the set; otherwise, the element in question would occupy the empty cell.
+
+<Video src="misc/probing-animation.mp4 />
 
 Deletion is a tad tricky; recall how, to search for an item, we always stop once 
 at an empty cell. However, deleting a given item will mess up the search process
-for any item that had to "jump" over the item we want to delete. There are a few 
-ways of addressing this issue which are beyond the scope of what we need to know. 
+for any item that had to "jump" over the item we want to delete. 
+
+![Hash Table Deletion Issue](/static/images/misc/hash-table-delete.png)
+
+There are a few ways of addressing this issue which are beyond the scope of what we need to know. 
+One option is to have deleted elements be marked with a tag that indicates there used to be an 
+element at the location of the deleted item.
 For those curious, the deletion process is described [here](https://en.wikipedia.org/wiki/Linear_probing).
 
 ### Load Factor

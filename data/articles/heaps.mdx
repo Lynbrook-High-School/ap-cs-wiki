@@ -94,24 +94,25 @@ Instead of being $\mathcal{O}(n \log{n})$, this algorithm is $\mathcal{O}(n)$.
 Here's some pseudocode to demonstrate the algorithm.
 
 ```
-FUNCTION Heapify(array, n, i):
-    largest ← i
-    left ← 2 * i + 1
-    right ← 2 * i + 2
+function heapify(array, n, i):  
+    largest = i  
+    left = 2 * i + 1  
+    right = 2 * i + 2  
 
-    IF left < n AND array[left] > array[largest]:
-        largest ← left
+    if (left < n and array[left] > array[largest]):  
+        largest = left  
 
-    IF right < n AND array[right] > array[largest]:
-        largest ← right
+    if (right < n and array[right] > array[largest]):  
+        largest = right  
 
-    IF largest ≠ i:
-        SWAP array[i] AND array[largest]
-        Heapify(array, n, largest)
+    if (largest != i):  
+        swap(array[i], array[largest])  
+        heapify(array, n, largest)  
 
-FUNCTION BuildHeap(array, n):
-    FOR i ← (n / 2) - 1 DOWN TO 0:
-        Heapify(array, n, i)
+function build_heap(array, n):  
+    for i = (n / 2) - 1 down to 0:  
+        heapify(array, n, i)  
+
 ```
 
 To understand why this converts our array to a heap, consider the following
