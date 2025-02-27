@@ -18,7 +18,7 @@ const Video = ({ src }: { src: string }) => {
     : `/ap-cs-wiki/static/videos/${src}`
 
   return (
-    <video width="960" height="720" controls>
+    <video width="960" controls>
       <source src={path} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
