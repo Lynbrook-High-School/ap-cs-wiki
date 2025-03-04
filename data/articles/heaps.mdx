@@ -38,18 +38,17 @@ for all values of $i$ not the root.
 > A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible.
 > 
 > For example, this is a complete binary tree:
-> ![Complete Binary Tree](/static/images/heaps/complete_tree.png)
+> ![Complete Binary Tree](/static/images/heaps/complete-binary-tree.png)
 > 
 > And this is **not** a complete binary tree:
-> ![Binary Tree](/static/images/heaps/binary_tree.png)
+> ![Binary Tree](/static/images/heaps/binary-tree.png)
+> This is because node 1 does not have a right child, breaking the complete tree property.
 
 Because a heap is a complete binary tree, the following property holds:
 - Node $i$'s left child is $2i+1$
 - Note $i$'s right child is $2i + 2$
 
-Note that this indexing assumes that our root node is $0$.
-
-This allows us to implement a heap as an array (typically an `ArrayList`).
+Note that this indexing assumes that our root node is $0$. This allows us to implement a heap as an array.
 
 As a note, we consider a heap to be partially ordered; however, none of the
 neat properties of the binary search tree apply to it. 
