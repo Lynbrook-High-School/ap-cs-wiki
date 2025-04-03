@@ -1,0 +1,460 @@
+---
+title: Recursion
+date: '2025-4-1'
+tags: ['Ch 22 Recursion']
+draft: false
+summary: Functions calling themselves.
+---
+
+| Resources | Notes |
+|-----------|-------|
+| [Recursion-1](https://codingbat.com/java/Recursion-1) | easy recursion practice |
+| [Recursion-2](https://codingbat.com/java/Recursion-2) | harder recursion practice |
+| [Induction](https://www.cs.ucdavis.edu/~franklin/ecs20/2012/fall/induction_handout.pdf) | induction (optional) |
+
+
+## What is Recursion?
+
+Recursion is when we model a big problem as several similar (but smaller)
+problems, where we can eventually directly compute the answer.
+
+That's a somewhat abstract definition. Let's consider a more concrete 
+example.
+
+The fibonacci sequence is defined as the following:
+
+$$
+\text{fibonacci}(n) = \text{fibonacci}(n - 1) + \text{fibonacci}(n - 2)
+$$
+
+where $\text{fibonacci}(0) = 0$ and $\text{fibonacci}(1) = 1$.
+
+This is a more natural example of recursion. In essense, we are 
+breaking down our big problem into some smaller problems to find our answer. 
+
+## Solving Recursion Problems 
+
+In recursion, we model our current step in the problem as being a "state"
+in the problem. That is, we need to find some way to represent our smaller problems. Here, our state is just the current fibonacci number 
+we want to compute.
+
+Typically, we put every state under two categories:
+- Base Case
+  - We can directly solve the problem without recursing
+- Recursive Case 
+  - We need to reduce our big problem to a base case to solve this problem
+
+Let's consider the fibonacci sequence. 
+- Base Case
+  - If $n=0$ or $n=1$, then the answer is just $n$
+- Recursive Case 
+  - $\text{fibonacci}(n) = \text{fibonacci}(n - 1) + \text{fibonacci}(n - 2)$
+
+So, in our code, we first check if our current state falls under the base 
+case. If so, we directly compute our answer. Otherwise, we recurse.
+
+```java
+static long fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+```
+
+## Recursion or Iteration?
+
+Recursion provides short, elegant solutions to problems where it is 
+suited for. It's especially suitable when it comes to branching: 
+for example, if we are given a binary tree and need to traverse said 
+tree, recursion is an elegant way of traversing the tree. 
+
+That being said, recursion is often slower than iteration for the following reasons:
+- Recursion is inherently slower in most languages. It requires adding recursive calls to stack memory, making it less memory efficient in some cases 
+  - However, if the alternative is explicitly using a stack (e.g. `java.util.Stack`), recursion is often not that much worse (or is better) than iteration
+- Recursion, if not optimized, can be orders of magnitude shorter 
+
+Let's go back to the fibonacci problem. Here's a diagram of 
+all the recursive calls made:
+
+![Recursive Calls](/static/images/misc/recursive-calls.png)
+
+Try to guess the time complexity of the recursive fibonacci 
+algorithm!
+
+<Spoiler title="Time Complexity">
+
+This is actually $\mathcal{O}(2^{n})$! Which is *incredibly*
+slow, making it impractical.
+
+</Spoiler>
+
+Meanwhile, we can calculate the $n$-th fibonacci number quite easily 
+with iteration, and in linear time.
+
+### Iterative Code:
+
+**Time Complexity:** $\mathcal{O}(n)$
+
+```java
+static long fibonacci(int n) {
+    if (n <= 1) return n;
+
+    long cur = 0;
+    long prev1 = 0;
+    long prev2 = 1;
+    for (int i = 2; i <= n; i++) {
+        cur = prev1 + prev2;
+        prev1 = prev2;
+        prev2 = cur;
+    }
+
+    return cur;
+};
+```
+
+### Recursive Code:
+
+**Time Complexity:** $\mathcal{O}(2^{n})$
+
+```java
+static long fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+```
+
+The iterative code isn't that much harder to code! Thus, it makes 
+much more sense to just use iteration.
+
+<Spoiler title="Recursion Optimization">
+
+There is a way to optimize recursive methods like our 
+fibonacci method. This is known as **dynamic programming**.
+
+As mentioned earlier, each recursive subproblem can be reduced to 
+a **state**. We assume that each recursive call with the same state 
+will return the same result. 
+
+Recall the previous diagram of the fibonacci function calls. There's a 
+*lot* of unnecessary (and duplicated) function calls. To get rid of these calls, we can store all the states we have already calculated in some 
+data structure (e.g. an array), and use the already calculated states 
+whenever possible.
+
+```java
+static long[] memo = new long[MAX_N]; // assume n < memo.length
+
+static long fibonacci(int n) {
+    if (n <= 1) return n; 
+    if (memo[n] > 0) return memo[n]; 
+
+    memo[n] = fibonacci(n - 1) + fibonacci(n - 2);
+    return memo[n];
+};
+```
+
+This idea of dynamic programming has a whole host of applications. 
+If curious, check out the dynamic programming section in 
+[this book](https://usaco.guide/CPH.pdf). Note that you don't need to know this, but 
+it is neat.
+
+After applying this optimization, the code goes from 
+$\mathcal{O}(2^n)$ to $\mathcal{O}(n)$. The space complexity 
+is worse (i.e. it uses much more memory) than the iterative version 
+due to needing to allocate an array. However, this is often not 
+an issue.
+
+</Spoiler>
+
+Many introductory recursion problems (e.g. the ones found on CodingBat) involve what's known as **tail recursion**. This is where our function 
+does no more computation after our recursive call.
+
+Generally speaking, most examples of tail recursion can be easily 
+emulated with iteration. However, it is worth noting that the 
+compiler often optimizes tail recursion enough where it doesn't 
+really matter. 
+
+## Proving Recursion 
+
+Solving recursion problems often requires:
+- Defining a base case 
+- Having a recursive case where we reduce to the base case 
+
+This may seem reminiscent to induction. Induction is often used to 
+prove that recursion works.
+
+Formally proving our recursion is typically unnecessary. Typically, to
+justify recursion, we just need to convince ourselves of the following: 
+1. We have a functional base case 
+2. All recursive states eventually reach a base case 
+3. If we assume all recursive calls work correctly, the function as a whole works 
+
+## Worked Examples
+
+### Example - Count7
+
+**Statement:** Given an integer, count the number of times the digit $7$ 
+shows up.
+
+Let's turn our integer into a string of digits, as that's a bit easier 
+to think about. Then, we can turn it into a recursive problem! 
+
+As with all recursion problems, we need a base case and a recursive case. 
+- Base Case: string is empty
+- Recursive Case: we consider current digit's contribution, then recurse 
+
+The recursive implementation is quite nice; it's only two lines!
+
+```java
+static int count7(int n) {
+	if (n == 0) return 0;
+	return count7(n / 10) + (n % 10 == 7 ? 1 : 0);
+}
+```
+
+Just some little notes on the implementation: 
+- We don't turn $n$ into a string in our actual implementation 
+  - `n % 10` gets the rightmost digit 
+  - `n / 10` cuts out the rightmost digit
+- `n % 10 == 7 ? 1 : 0` is what's known as a ternary operator
+  - It basically translates to: 
+	  - If `n % 10 == 7` return 1 
+    - Otherwise, return 0
+
+<Spoiler title="Iterative Code">
+
+As with many recursion problems, the iteration code 
+is *pretty* similar, and is faster. 
+
+```java
+static int count7(int n) {
+	int num7 = 0;
+	while (n > 10) {
+		if (n % 10 == 7) num7++;
+		n /= 10;
+	}
+	return num7;
+}
+```
+
+That being said, it is a bit more verbose than the recursive 
+version.
+
+</Spoiler>
+
+### Example - Binary Exponentiation
+
+**Statement:** Given a base $a$ and exponent $b$, compute $a^{b}$. We assume $b$ is an integer.
+
+> [!NOTE]
+> Exponents grow *really* fast, and often do not fit inside 
+> integers. For now, let's just assume that the result will fit 
+> in a `double`.
+
+Now, the naive solution just directly returns the result by multiplying 
+$\mathcal{O}(b)$ times. However, with recursion, we can elegantly 
+solve this problem in $\mathcal{O}(\log{b})$.
+
+Let's say we have a function $\texttt{binpow}(a, b)$. For now, assume that $b$ is even. Then, we can claim that: 
+
+$$
+\texttt{binpow}(a, b) = \texttt{binpow}(a^{2}, \frac{b}{2})
+$$
+
+This is true because if $b$ is even, then $(a^{2})^{\frac{b}{2}} = a^{b}$.
+
+Now, let's assume $b$ is odd. Then, the following holds:
+
+$$
+\texttt{binpow}(a, b) = a \cdot \texttt{binpow}(a^{2}, \frac{b - 1}{2})
+$$
+
+This certainly looks like recursion! Let's define our cases.
+- Base Case: $a^0$ is always $1$, so if `b == 0` we return 1
+- Recursive Case: given in the formulas above
+
+Our code ends up being quite nice. 
+
+```java
+static double binpow(double a, int b) {
+	if (b == 0) return 1.0;
+	double recurse = binpow(a * a, b / 2);
+	if (b % 2 == 1) {
+			// we need to multiply by a
+			return a * recurse;
+	}
+	// because b % 2 == 0, we don't multiply
+	return recurse;
+}
+```
+
+With enough ternary operators, we can reduce it to 
+one line!
+
+```java
+static double binpow(double a, int b) {
+	return b > 0 ? binpow(a * a, b / 2) * (b % 2 > 0 ? a : 1) : 1;
+}
+```
+
+<Spoiler title="Iterative Code">
+
+Similar to many introductory recursion examples, binary 
+exponentation is also easily implemented with iteration.
+
+```java
+static double binpow(double a, int b) {
+	double res = 1;
+	while (b > 0) {
+		if (b % 2 == 1) res *= a; 
+		a *= a;
+		b /= 2;
+	}
+	return res;
+}
+```
+
+The recursive code is nice though, as it allows us to implement 
+the function as a one-liner.
+
+</Spoiler>
+
+## Example - Maze Exploration
+
+**Statement:** Find all reachable open cells from a given start in a grid of blocked/open cells.
+
+We assume that we cannot go outside of the grid, and that we can 
+only move up, down left, or right.
+
+Input:
+```
+Grid:  
+0 1 1  
+1 0 1  
+0 1 1  
+
+Start: (0, 1)  
+```
+
+Output:
+```
+Reachable Cells: 
+{0, 1}, {0, 2}, {1, 2}, {2, 1}, {2, 2}
+```
+
+The easiest way to solve this problem is with recursion. 
+We can view making a move as sort of a "branching" subproblem, which 
+naturally motivates recursion. Here's some example code: 
+
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class MazeExplorer {
+    private static final int[][] DIRECTIONS = {
+        {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+    };
+    
+    public static void main(String[] args) {
+        int[][] grid = {
+            {0, 1, 1},
+            {1, 0, 1},
+            {0, 1, 1}
+        };
+        int startRow = 0, startCol = 1;
+        
+        Set<String> reachableCells = new HashSet<>();
+        explore(grid, startRow, startCol, reachableCells);
+        
+        System.out.println("Reachable Cells: " + reachableCells);
+    }
+    
+    private static void explore(int[][] grid, int row, int col, Set<String> visited) {
+        if (!isValid(grid, row, col, visited)) {
+            return;
+        }
+        
+        String pos = row + "," + col;
+        visited.add(pos);
+        
+        for (int[] direction : DIRECTIONS) {
+            explore(grid, row + direction[0], col + direction[1], visited);
+        }
+    }
+    
+    private static boolean isValid(int[][] grid, int row, int col, Set<String> visited) {
+        return row >= 0 && row < grid.length && 
+               col >= 0 && col < grid[0].length && 
+               grid[row][col] == 1 && 
+               !visited.contains(row + "," + col);
+    }
+}
+```
+
+Note that we have to be really careful to not visit a cell multiple 
+times! Otherwise, we will have infinite recursive calls. To prevent 
+visiting a cell multiple times, we can either store our visited cells 
+in some sort of set data structure or just maintain a boolean array.
+
+<Spoiler title="Iterative Code">
+
+This is an example of a situation where recursion is arguably more 
+suitable than iteration. That is, using recursion is just more elegant. 
+
+```java
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
+public class MazeExplorer {
+    private static final int[][] DIRECTIONS = {
+        {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+    };
+    
+    public static void main(String[] args) {
+        int[][] grid = {
+            {0, 1, 1},
+            {1, 0, 1},
+            {0, 1, 1}
+        };
+        int startRow = 0, startCol = 1;
+        
+        Set<String> reachableCells = exploreIteratively(grid, startRow, startCol);
+        System.out.println("Reachable Cells: " + reachableCells);
+    }
+    
+    private static Set<String> exploreIteratively(int[][] grid, int startRow, int startCol) {
+        Set<String> visited = new HashSet<>();
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{startRow, startCol});
+        
+        while (!stack.isEmpty()) {
+            int[] cell = stack.pop();
+            int row = cell[0], col = cell[1];
+            String pos = row + "," + col;
+            
+            if (!isValid(grid, row, col, visited)) {
+                continue;
+            }
+            
+            visited.add(pos);
+            
+            for (int[] direction : DIRECTIONS) {
+                stack.push(new int[]{row + direction[0], col + direction[1]});
+            }
+        }
+        return visited;
+    }
+    
+    private static boolean isValid(int[][] grid, int row, int col, Set<String> visited) {
+        return row >= 0 && row < grid.length && 
+               col >= 0 && col < grid[0].length && 
+               grid[row][col] == 1 && 
+               !visited.contains(row + "," + col);
+    }
+}
+
+```
+
+To emulate recursion, we have to explicitly push our states into 
+a stack, instead of using the native recursion stack. 
+
+</Spoiler>
