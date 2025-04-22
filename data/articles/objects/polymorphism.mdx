@@ -1,0 +1,274 @@
+---
+title: Polymorphism in Java
+date: '2024-11-12'
+tags: ['Ch 3 Objects']
+draft: false
+summary: Java objects taking multiple forms.
+---
+
+> pol·y·mor·phism (noun)
+> 
+> the condition of occurring in several different forms.
+
+Polymorphism means "taking several different forms". What does this mean 
+in the context of programming?
+
+The central idea behind polymorphism is that it allows us to perform 
+a singular action multiple ways. In Java terms, it allows us to execute 
+certain methods in multiple ways.
+
+## Method Overloading
+
+**Method overloading**, also sometimes called **compile-time polymorphism**,
+is achieved by having multiple methods sharing the same name, but having 
+different parameters. If we treat a method as a black box, where we give 
+it an input and it performs a specific action, method overloading is sort of like
+allowing us to format our input in a different way.
+
+Here's an example of what it looks like. 
+
+```java
+public class OverloadingExample {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public double add(double a, double b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        OverloadingExample obj = new OverloadingExample();
+        System.out.println("Sum of integers: " + obj.add(5, 10));
+        System.out.println("Sum of doubles: " + obj.add(5.5, 10.5));
+    }
+}
+```
+
+Syntax wise, method overloading is pretty simple. We just define multiple 
+methods with the same name but different parameters, and Java takes care 
+of the rest.
+
+## Method Overriding
+
+**Method overriding**, also sometimes called **run-time polymorphism**, 
+is achieved by having a subclass override a method defined in our superclass.
+
+Make sure you understand [inheritance](/data/articles/objects/inheritance) 
+before proceeding, as run-time polymorphism and inheritance are very 
+closely related.
+
+Syntax wise, run-time polymorphism looks like this:
+
+```java
+Super obj = new Sub();
+obj.doSuperMethod();
+```
+
+Note that the following is illegal:
+```java 
+Sub obj = new Super(); // illegal!
+```
+
+Essentially, it allows us to call a superclass method as an "interface" of sorts. 
+If our subclass defines its own implementation for said method, we use the subclass
+implementation instead. One way to think about this is that the superclass defines the
+**what** (i.e. what methods can be used), and the subclasses can dictate the **how** (i.e. how the method 
+is executed).
+
+Here's an example of a scenario in which method overriding 
+is useful.
+
+Say we have a class `Animal`. Each animal must be able to perform each of 
+the following actions:
+- Say hello
+- Say the type of food it eats
+
+Each animal will perform each of these actions differently. However, given 
+that each animal's core actions are all the same, we still want to use 
+inheritance to abstract our code a bit.
+
+```java
+class Animal {
+    private String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public void sayHello() {
+        System.out.println("Hello! I'm " + name + ".");
+    }
+
+    public void sayFood() {
+        System.out.println("I eat food!");
+    }
+}
+
+class Cow extends Animal {
+    public Cow(String name) {
+        super(name);
+    }
+
+    public void sayFood() {
+        System.out.println("I eat grass!");
+    }
+};
+
+public class Main {
+    public static void main(String[] args) {
+        Animal animal = new Cow("Bessie");
+        animal.sayHello(); // prints "Hello! I'm Bessie"
+        animal.sayFood(); // prints "I eat grass!"
+    }
+};
+```
+
+Let's now say we want to make a farm of animals. Because we don't have a fixed
+number of animals in a farm, it makes sense to store them all in some array-like
+structure. How would we put all of these different animals into our array?
+
+Well, remember how each different animal is united under the `Animal` class.
+Also, all of the core actions that an animal does are included in the class. 
+Thus, we can make an array of `Animal` objects!
+
+```java
+class Animal {
+    private String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public void sayHello() {
+        System.out.println("Hello! I'm " + name + ".");
+    }
+
+    public void sayFood() {
+        System.out.println("I eat food!");
+    }
+}
+
+class Cow extends Animal {
+    public Cow(String name) {
+        super(name);
+    }
+
+    public void sayFood() {
+        System.out.println("I eat grass!");
+    }
+};
+
+class Squirrel extends Animal {
+    public Squirrel(String name) {
+        super(name);
+    }
+
+    public void sayFood() {
+        System.out.println("I eat acorns!");
+    }
+};
+
+public class Main {
+    public static void main(String[] args) {
+        Animal[] farm = new Animal[]{
+            new Cow("Bessie"), new Cow("Elsie"),
+            new Squirrel("Sandy"), new Cow("Mildred")
+        };
+
+        for (Animal i : farm) {
+            i.sayHello();
+            i.sayFood();
+            System.out.println();
+        }
+    }
+};
+```
+
+Output:
+```
+Hello! I'm Bessie.
+I eat grass!
+
+Hello! I'm Elsie.
+I eat grass!
+
+Hello! I'm Sandy.
+I eat acorns!
+
+Hello! I'm Mildred.
+I eat grass!
+```
+
+## Interfaces and Abstract Classes
+
+Interfaces and abstract classes often serve a similar purpose. They essentially
+are used to facilitate polymorphism by sort of enforcing a "contract" with all 
+of its subclasses.
+
+Both interfaces and abstract classes cannot be directly instantiated. That is,
+if we have an interface or abstract class called `Super`, we can't directly do
+the following:
+
+```java
+Super obj = new Super(); // illegal in Java
+```
+
+However, if we have a subclass `Sub` that inherits the `Super` class, then 
+polymorphism does allow us to instantiate the `Super` class.
+
+```java
+Super obj = new Sub(); // legal in Java
+```
+
+### Abstract Classes
+
+Abstract classes are like normal classes, except they allow for a certain degree
+of abstraction. That is, there are some methods that the class forces its subclasses
+to implement. Syntax-wise, it looks like this:
+
+<!--
+Also add some small classes to demonstrate what syntax looks like.
+-->
+
+```java
+abstract class Animal {
+    public abstract void sayFood();
+    public void sayHello() {
+        System.out.println("Hello!");
+    }
+}
+```
+
+Anything not directly implemented must be declared as `abstract`. **Subclasses must implement
+abstract methods!**.
+
+### Interfaces
+
+Interfaces are sort of like an abstract class taken to the max. In an interface,
+**every method must be abstract**. Think of it as a completely abstract class. 
+Syntax wise, it looks like this:
+
+```java
+interface Animal {
+    public void eats();
+    public void sayHello();
+};
+```
+
+**Every method listed in an interface must be implemented by the subclass**.
+
+### Abstract Classes vs. Interfaces
+
+From a raw coding perspective, here are the differences:
+- An abstract class **can** have a constructor. An interface cannot.
+- Abstract classes must declare methods that aren't implemented as being `abstract`. 
+  Because all interface methods are already abstract, this is unnecessary.
+- An interface cannot have any fields/attributes. An abstract method can.
+- A class inherits an abstract class with `extends`. For interfaces, we use the  
+  `implements` keyword.
+- A class can only inherit from one class, while multiple interfaces can be inherited.
+
+An analogy we can use is that for a car, an abstract class would be a baseline
+car design that has some details not filled in yet. Meanwhile, an interface 
+would enforce a certain feature/property that the car must fulfill.
