@@ -1,0 +1,164 @@
+---
+title: AP CS A Exam Tips
+date: '2025-4-22'
+tags: ['Misc.']
+draft: false
+summary: General tips for the AP exam.
+---
+
+## Studying
+
+You can see the topic distribution [here](https://apcentral.collegeboard.org/courses/ap-computer-science-a).
+Of course, this doesn't make any guarantees on what type of problems will show up on the exam, but it 
+is good to know to understand which topics occur more frequently, and which ones are rarer.
+
+### MCQs
+
+CollegeBoard unfortunately does not publish previous years' MCQ questions. One option is to go to your AP Classroom and review the previous MCQs you've done.
+
+Ideally, when practicing MCQ you should practice under some form of time limit, to ensure that
+you are spending a realistic amount of time on each question.
+
+### FRQs
+
+Luckily, CollegeBoard does publish previous years' FRQs. You can find them all 
+[here](https://apcentral.collegeboard.org/courses/ap-computer-science-a/exam/past-exam-questions).
+
+Again, if you practice FRQs, setting some timer is a good idea.
+
+## General Exam Tips
+
+The standard advice for any test applies to the AP CS exam: 
+- Get proper sleep
+- Eat a good (and healthy) breakfast/meal
+- Make sure all your paperwork/supplies are in order
+
+Reviewing the content the night before is a good idea, but don't burn yourself out. Try to
+get your prep done at least a few days before the exam, instead of cramming it the night before or 
+day of the exam.
+
+As a note, **the AP CS exam is now digital**. This removes a lot of the headache that came with 
+having to handwrite code.
+
+### MCQs
+
+The MCQ is worth **50%** of your exam score. You are given **40 questions** and **1.5 hours**
+to complete these questions.
+
+If we do some math, we find that we have more than 2 minutes per question. In terms of timing,
+that gives a lot of time for us to finish our MCQs.
+
+#### Computational Problems
+
+Often, you are given some piece of code, and asked to evaluate what the code prints out/does.
+The best way to solve these types of problems is to use your scratch paper, and manually simulate
+it; don't try to do it in your head, as this is more error-prone and doesn't allow you
+to check your work.
+
+A common strategy in competitions is to take your scratch paper, and divide each side into
+four (or more) boxes. This is probably a good idea, as it allows you to organize your work
+more effectively.
+
+#### Conceptuals
+
+Often, AP CS A conceptual MCQs will focus on one specific topic. For example, they might
+test:
+- Knowledge of basic data types
+- Operator precedence
+- Booleans/conditionals (and De Morgan's Law)
+- Iteration
+- Objects (basic concepts + inheritance + polymorphism)
+- Math + random numbers
+- Arrays
+- Recursion
+
+Categorizing problems under some topic may help you brainstorm the key concepts needed
+to solve said problem.
+
+As with any MCQ problem, you should try to look for any tricks/off-by-ones/similar, and also use process
+of elimination. 
+
+### FRQs
+
+The FRQ is worth **50%** of your exam score. You are given **4 questions** and **1.5 hours** to complete
+these questions.
+
+It's a good idea to take a look at the official [scoring guidelines](https://apcentral.collegeboard.org/media/pdf/ap24-sg-computer-science-a.pdf).
+
+> Apply the question scoring criteria first, which always takes precedence. Penalty points can only be 
+deducted in a part of the question that has earned credit via the question rubric. No part of a question (a, b, 
+c) may have a negative point total. A given penalty can be assessed only once for a question, even if it 
+occurs multiple times or in multiple parts of that question. A maximum of 3 penalty points may be assessed 
+per question. 
+
+To summarize:
+- Points are not given additively; rather, you get penalty for mistakes
+- There is no double jeopardy when it comes to penalties. A penalty can only be given once per question
+- At most 3 penalty points can be assigned per question; the point total for any part of the question must be non-negative
+
+Generally speaking, the graders do NOT care about minor syntax mistakes. That is, if you 
+forget parenthesis, braces, etc., they don't mark you off for that. 
+
+> [!WARNING]
+> This isn't to say that you should deliberately take shortcuts and write syntactically incorrect
+> code. You should still try to write accurate Java code. This is just to say that if you make
+> some minor syntax mistake, they probably will choose leniency. The scoring guidelines do note that 
+> the correct code should be reasonably inferrable. For example if you have two variables `g` and `G`, and 
+> and use the wrong variable, they cannot reasonably infer which variable you intended to use.
+
+However, the following errors will result in a deduction:
+1. Array/collection access confusion ([] get) 
+2. Extraneous code that causes side-effect (e.g., printing to output, incorrect precondition check) 
+3. Local variables used but none declared 
+4. Destruction of persistent data (e.g., changing value referenced by parameter) 
+5. Void method or constructor that returns a value 
+
+You should be careful to not make errors 1, 4, and 5. Point 4 is a bit hard to decipher;
+here's an example of an error.
+
+> Write a method doubledArray that returns a **new array where every value is doubled**.
+
+Wrong code:
+```java
+public static int[] doubledArray(int[] arr) {
+    for (int i = 0; i < arr.length; i++) {
+        arr[i] *= 2;
+    }
+    return arr;
+}
+```
+
+Correct code:
+```java
+public static int[] doubledArray(int[] arr) {
+    int[] res = new int[arr.length];
+    for (int i = 0; i < arr.length; i++) {
+        res[i] = arr[i] * 2;
+    }
+    return res;
+}
+```
+
+The first code snippet is wrong because we are asked to make a **new array** where the values
+are doubled. We are **not** asked to double all the values in our input array, as the 
+array in our input is a reference to what CollegeBoard calls **persistent data**.
+
+#### Writing Your Response
+
+To improve readability and reduce the likelihood of error, the following practices
+are advisable:
+- Properly spacing out your code (e.g. spacing out operators, loops, etc.)
+- Adding comments when necessary/reasonable
+- Use meaningful variable names
+
+These practices will help you reduce the chance of making a mistake, as well as making 
+your response easier to read.
+
+Before writing your code, you should at least have a general understanding of how you are 
+going to implement your code. Now that the exam is digital, this is *slightly* less important,
+as you can now easily revise your code. But it's still a good idea to have some sort of outline
+in your head on how to implement your solution.
+
+As another note, in general you shouldn't try to make your code too "cute" or "slick". Just
+pick the most straightforward approach! Remember, your goal is to write a correct response,
+not the shortest response.
