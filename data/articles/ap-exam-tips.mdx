@@ -12,6 +12,14 @@ You can see the topic distribution [here](https://apcentral.collegeboard.org/cou
 Of course, this doesn't make any guarantees on what type of problems will show up on the exam, but it 
 is good to know to understand which topics occur more frequently, and which ones are rarer.
 
+In the Lynbrook AP CS A Schoology classroom, there is a link to various resources. 
+In particular, [CSAwesome](https://runestone.academy/ns/books/published/csawesome/index.html) has a lot of practice for every topic. This website also
+has good information.
+
+Also, because the exam is digital, it will be facilitated through the BlueBook testing
+application. If you aren't familiar with this software, becoming familiar with it and its
+provided [tools](https://bluebook.collegeboard.org/students/tools) is a good idea.
+
 ### MCQs
 
 CollegeBoard unfortunately does not publish previous years' MCQ questions. One option is to go to your AP Classroom and review the previous MCQs you've done.
@@ -48,6 +56,21 @@ to complete these questions.
 If we do some math, we find that we have more than 2 minutes per question. In terms of timing,
 that gives a lot of time for us to finish our MCQs.
 
+#### Reading MCQs
+
+For short, concise statements, reading the question directly is a good idea. Make sure to read 
+it carefully, as to not miss any tricks.
+
+However, for longer questions, it is easy to get confused or lost when reading the statement.
+Here are some strategies you can use to help read the question:
+- Read what the question is asking at the end. What specifically do they want you to answer?
+- As you read the prompt, highlight useful information.
+
+Sometimes, a MCQ prompt will give you a piece of code (e.g. a few classes) that you must refer to for multiple
+MCQ questions. A good idea is to try to understand what each class does, but not necessarily 
+all the nitty-gritty details (e.g. all the specific methods), as to not be overwhelmed by 
+the code.
+
 #### Computational Problems
 
 Often, you are given some piece of code, and asked to evaluate what the code prints out/does.
@@ -58,6 +81,43 @@ to check your work.
 A common strategy in competitions is to take your scratch paper, and divide each side into
 four (or more) boxes. This is probably a good idea, as it allows you to organize your work
 more effectively.
+
+<Spoiler title="Worked Example">
+
+Consider the following code segment. What is printed at the end?
+
+```java
+List<Integer> list = new ArrayList<Integer>(); 
+list.add(new Integer (7)); 
+list.add(new Integer (6)); 
+list.add(1, new Integer (5)); 
+list.add(1, new Integer (4)); 
+list.add(new Integer (3)); 
+list.set(2, new Integer (2)); 
+list.add(1, new Integer (1)); 
+System.out.println(list);
+```
+
+This is a pretty typical AP CS MCQ, where you're given
+a long code segment and asked to evaluate what it does. 
+There isn't any "trick"; the easiest way to do this
+is to directly simulate what it's doing.
+
+| Step | Code Line                              | Description                      | List Contents        |
+|------|----------------------------------------|----------------------------------|----------------------|
+| 1    | list.add(new Integer(7));              | Add 7 to the list                | [7]                  |
+| 2    | list.add(new Integer(6));              | Add 6 to the end                 | [7, 6]               |
+| 3    | list.add(1, new Integer(5));           | Insert 5 at index 1              | [7, 5, 6]            |
+| 4    | list.add(1, new Integer(4));           | Insert 4 at index 1              | [7, 4, 5, 6]         |
+| 5    | list.add(new Integer(3));              | Add 3 to the end                 | [7, 4, 5, 6, 3]      |
+| 6    | list.set(2, new Integer(2));           | Replace value at index 2 with 2  | [7, 4, 2, 6, 3]      |
+| 7    | list.add(1, new Integer(1));           | Insert 1 at index 1              | [7, 1, 4, 2, 6, 3]   |
+
+You don't necessarily need to do each step one-by-one; for example, you could
+do steps 1 and 2 at the same time to save space and time. However, the general
+principle still applies: just write everything down.
+
+</Spoiler>
 
 #### Conceptuals
 
@@ -78,10 +138,65 @@ to solve said problem.
 As with any MCQ problem, you should try to look for any tricks/off-by-ones/similar, and also use process
 of elimination. 
 
+<Spoiler title="Worked Example">
+
+What does the following code print?
+```java
+public class Main {
+    public static void foo(int bar, String str) {
+        bar++;
+        str += 'a';
+        str = baz.toUpperCase();
+    }   
+    
+    public static void main(String[] args) {
+        int bar = 5;
+        String baz = "bessie";
+        foo(bar, baz);
+        System.out.println(bar + " " + baz);
+    }
+};
+```
+
+An `int` is a primitive data type, and a `String` is an object.
+
+Let's specifically think about the properties of `String` and objects in general:
+- In Java, Strings are immutable
+  - This means that we never change a string object; rather, we make new String objects. 
+- Object variables in Java are always **references** to objects.
+
+As for integers, we know that integers (and all primitives), when passed into a method,
+are passed by value. This means that we essentially create a new variable for our method 
+to use.
+
+So, in our method `foo(int bar, String baz)`, `bar` is passed by value, and `baz` is passed
+by reference.
+
+Because `bar` is passed by value, we know that `bar++` does nothing to the `bar` variable
+in main.
+
+To understand how the String is handled, consider the following diagram.
+
+![MCQ Explanation](/static/images/misc/mcq-explanation.png)
+
+</Spoiler>
+
 ### FRQs
 
 The FRQ is worth **50%** of your exam score. You are given **4 questions** and **1.5 hours** to complete
 these questions.
+
+#### Reading FRQs
+
+Reading the FRQs isn't easy. With the exam being digital, annotating it is no longer an option.
+Here are some strategies to help you make sure you understand the prompt:
+- Take notes on any important details. The highlighting function may be of use.
+- Read all the examples.
+
+Sometimes, reading the examples first before reading all of the words is a good idea, as 
+you can often distill what the problem is asking for just by looking at what the examples show.
+
+#### Scoring
 
 It's a good idea to take a look at the official [scoring guidelines](https://apcentral.collegeboard.org/media/pdf/ap24-sg-computer-science-a.pdf).
 
@@ -159,6 +274,6 @@ going to implement your code. Now that the exam is digital, this is *slightly* l
 as you can now easily revise your code. But it's still a good idea to have some sort of outline
 in your head on how to implement your solution.
 
-As another note, in general you shouldn't try to make your code too "cute" or "slick". Just
+As another note, in general you shouldn't try to make your code too 'cute' or 'slick'. Just
 pick the most straightforward approach! Remember, your goal is to write a correct response,
 not the shortest response.
